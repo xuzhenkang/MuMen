@@ -1,0 +1,108 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical" >
+
+    <include layout="@layout/layout_navigation" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dip"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1" >
+
+            <ImageView
+                android:layout_centerInParent="true"
+               android:scaleType="centerCrop"
+                android:layout_width="120dip"
+                android:layout_height="120dip"
+                 android:id="@+id/img_add_imgv_1"
+                android:background="@drawable/btn_add" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1" >
+
+            <ImageView
+                android:visibility="gone"
+                android:id="@+id/img_add_imgv_2"
+                android:layout_centerInParent="true"
+               android:scaleType="centerCrop"
+                android:layout_width="120dip"
+                android:layout_height="120dip"
+                android:background="@drawable/btn_add" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dip"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1" >
+
+            <ImageView
+                android:visibility="gone"
+                android:id="@+id/img_add_imgv_3"
+                android:layout_centerInParent="true"
+               android:scaleType="centerCrop"
+                android:layout_width="120dip"
+                android:layout_height="120dip"
+                android:background="@drawable/btn_add" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1" >
+
+            <ImageView
+                android:visibility="gone"
+                android:id="@+id/img_add_imgv_4"
+                android:layout_centerInParent="true"
+               android:scaleType="centerCrop"
+                android:layout_width="120dip"
+                android:layout_height="120dip"
+                android:background="@drawable/btn_add" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dip"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1" >
+
+            <ImageView
+                android:visibility="gone"
+                android:id="@+id/img_add_imgv_5"
+                android:layout_centerInParent="true"
+               android:scaleType="centerCrop"
+                android:layout_width="120dip"
+                android:layout_height="120dip"
+                android:background="@drawable/btn_add" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1" >
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

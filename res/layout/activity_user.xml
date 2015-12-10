@@ -1,0 +1,246 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f1f1f1"
+    android:orientation="vertical" >
+
+    <include layout="@layout/layout_navigation" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dip"
+        android:layout_marginTop="10dip"
+        android:background="#ffffff"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="100dip"
+            android:layout_height="100dip"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dip"
+            android:background="@drawable/bg_head_user" >
+
+            <com.uesugi.mumen.CircleImageView
+                android:id="@+id/user_imgv_icon"
+                android:layout_width="80dip"
+                android:layout_height="80dip"
+                android:layout_centerInParent="true" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/user_txt_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:textColor="#090a0c"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/user_layout_icon"
+        android:layout_width="fill_parent"
+        android:layout_height="40dip"
+        android:layout_marginTop="10dip"
+        android:background="@drawable/mm_white2default" >
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:background="#dfdfdf" />
+
+        <ImageView
+            android:layout_width="15dip"
+            android:layout_height="17dip"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dip"
+            android:background="@drawable/icon_head" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="40dip"
+            android:text="头像"
+            android:textColor="#757575"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:layout_width="9dip"
+            android:layout_height="14dip"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dip"
+            android:background="@drawable/icon_more" />
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:background="#dfdfdf" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/user_layout_hb"
+        android:layout_width="fill_parent"
+        android:layout_height="40dip"
+        android:layout_marginTop="10dip"
+        android:background="@drawable/mm_white2default" >
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:background="#dfdfdf" />
+
+        <ImageView
+            android:layout_width="15dip"
+            android:layout_height="17dip"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dip"
+            android:background="@drawable/icon_xshb" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="40dip"
+            android:text="销售汇报"
+            android:textColor="#757575"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:layout_width="9dip"
+            android:layout_height="14dip"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dip"
+            android:background="@drawable/icon_more" />
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="10dip"
+            android:background="#dfdfdf" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/user_layout_fx"
+        android:layout_width="fill_parent"
+        android:layout_height="40dip"
+        android:background="@drawable/mm_white2default" >
+
+        <ImageView
+            android:layout_width="17dip"
+            android:layout_height="17dip"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dip"
+            android:background="@drawable/icon_wyfx" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="40dip"
+            android:text="我要分享"
+            android:textColor="#757575"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:layout_width="9dip"
+            android:layout_height="14dip"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dip"
+            android:background="@drawable/icon_more" />
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="10dip"
+            android:background="#dfdfdf" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/user_layout_dz"
+        android:layout_width="fill_parent"
+        android:layout_height="40dip"
+        android:background="@drawable/mm_white2default" >
+
+        <ImageView
+            android:layout_width="15dip"
+            android:layout_height="18dip"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dip"
+            android:background="@drawable/icon_dzyshb" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="40dip"
+            android:text="店装验收汇报"
+            android:textColor="#757575"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:layout_width="9dip"
+            android:layout_height="14dip"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dip"
+            android:background="@drawable/icon_more" />
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:background="#dfdfdf" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/user_layout_sj"
+        android:layout_width="fill_parent"
+        android:layout_height="40dip"
+        android:layout_marginTop="10dip"
+        android:background="@drawable/mm_white2default" >
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:background="#dfdfdf" />
+
+        <ImageView
+            android:layout_width="15dip"
+            android:layout_height="17dip"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dip"
+            android:background="@drawable/icon_xshb" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="40dip"
+            android:text="运营动态"
+            android:textColor="#757575"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:layout_width="9dip"
+            android:layout_height="14dip"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dip"
+            android:background="@drawable/icon_more" />
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:background="#dfdfdf" />
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:minHeight="0dip" >
+
+    <RelativeLayout
+        android:id="@+id/foot_view"
+        android:layout_width="fill_parent"
+        android:layout_height="40dip"
+        android:background="@android:color/transparent"
+        android:minHeight="40dip" >
+
+        <ProgressBar
+            android:id="@+id/foot_probar"
+            android:layout_width="19dip"
+            android:layout_height="19dip"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="30dip" />
+
+        <TextView
+            android:id="@+id/foot_protxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="正在加载......" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/foot_txtbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="获取失败 点击刷新！"
+        android:visibility="gone" />
+
+</RelativeLayout>

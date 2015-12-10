@@ -1,0 +1,23 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <include layout="@layout/layout_navigation" />
+
+    <WebView
+        android:id="@+id/gg_webview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="50dip"
+        android:layerType="hardware" />
+
+    <FrameLayout
+        android:id="@+id/video_fullView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#000000"
+        android:visibility="gone" >
+    </FrameLayout>
+
+</RelativeLayout>

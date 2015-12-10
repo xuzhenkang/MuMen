@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="100dip"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="100dip"
+        android:background="@drawable/mm_white2default"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:layout_width="101dip"
+            android:layout_height="74dip"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="13dip" >
+
+            <ImageView
+                android:id="@+id/row_article_imgv_icon"
+                android:layout_width="101dip"
+                android:layout_height="74dip"
+                android:background="@drawable/bg_default_list"
+                android:scaleType="fitXY" />
+
+            <ImageView
+                android:layout_width="101dip"
+                android:layout_height="74dip"
+                android:background="@drawable/image_stroke"
+                android:scaleType="fitXY" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/row_article_txt_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="13dip"
+            android:layout_marginRight="20dip"
+            android:textColor="#555555"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="13dip"
+        android:background="#eeeeee" />
+
+</LinearLayout>

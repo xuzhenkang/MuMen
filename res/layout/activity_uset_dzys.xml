@@ -1,0 +1,71 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f1f1f1"
+    android:orientation="vertical" >
+
+    <include layout="@layout/layout_navigation" />
+
+    <EditText
+        android:background="#ffffff"
+        android:id="@+id/dzys_edit_content"
+        android:layout_width="match_parent"
+        android:layout_height="180dip"
+        android:gravity="top"
+        android:hint="请输入验收内容"
+        android:paddingBottom="20dip"
+        android:paddingLeft="15dip"
+        android:paddingRight="15dip"
+        android:paddingTop="20dip"
+        android:textColor="#757575"
+        android:textColorHint="#cdcdcd"
+        android:textSize="14sp" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#cdcdcd" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dip"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:layout_width="120dip"
+            android:layout_height="120dip" >
+
+            <ImageView
+                android:id="@+id/dzys_imgv_1"
+                android:layout_width="90dip"
+                android:layout_height="90dip"
+                android:layout_centerInParent="true"
+                android:background="@drawable/btn_add"
+                android:scaleType="centerCrop" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="120dip"
+            android:layout_height="120dip" >
+
+            <ImageView
+                android:id="@+id/dzys_imgv_2"
+                android:layout_width="90dip"
+                android:layout_height="90dip"
+                android:layout_centerInParent="true"
+                android:background="@drawable/btn_add"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/dzys_btn_ok"
+        android:layout_width="267dip"
+        android:layout_height="40dip"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dip"
+        android:background="@drawable/btn_fabu" />
+
+</LinearLayout>

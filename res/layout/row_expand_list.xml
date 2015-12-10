@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="180dip"
+    android:background="@android:color/transparent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="140dip"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:id="@+id/row_expand_layout_1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <com.uesugi.mumen.CircleImageView
+                android:id="@+id/row_expand_imgv_1"
+                android:layout_width="80dip"
+                android:layout_height="80dip"
+                android:layout_marginTop="10dip" />
+
+            <TextView
+                android:id="@+id/row_expand_txt_name_1"
+                android:layout_width="80dip"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dip"
+                android:gravity="center"
+                android:textColor="#213815"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/row_expand_layout_2"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <com.uesugi.mumen.CircleImageView
+                android:id="@+id/row_expand_imgv_2"
+                android:layout_width="80dip"
+                android:layout_height="80dip"
+                android:layout_marginTop="10dip" />
+
+            <TextView
+                android:id="@+id/row_expand_txt_name_2"
+                android:layout_width="80dip"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dip"
+                android:gravity="center"
+                android:textColor="#213815"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/row_expand_layout_3"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <com.uesugi.mumen.CircleImageView
+                android:id="@+id/row_expand_imgv_3"
+                android:layout_width="80dip"
+                android:layout_height="80dip"
+                android:layout_marginTop="10dip" />
+
+            <TextView
+                android:id="@+id/row_expand_txt_name_3"
+                android:layout_width="80dip"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dip"
+                android:gravity="center"
+                android:textColor="#213815"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
