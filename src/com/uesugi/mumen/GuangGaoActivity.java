@@ -61,7 +61,8 @@ public class GuangGaoActivity extends Activity {
 		Log.e("mUrl", mUrl);
 		initView();
 		showProgressDlg("正在加载中...");
-		getYouku();
+		// getYouku();
+		webStart();
 	}
 
 	private void initView() {
@@ -120,9 +121,9 @@ public class GuangGaoActivity extends Activity {
 	};
 
 	private void webStart() {
-
-		webview.loadDataWithBaseURL("http://youku.com", mHtml, "", "utf-8",
-				null);
+		webview.loadUrl(mUrl);
+		// webview.loadDataWithBaseURL("http://youku.com", mHtml, "", "utf-8",
+		// null);
 
 	}
 

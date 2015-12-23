@@ -443,8 +443,11 @@ public class PullDownView extends LinearLayout implements OnScrollOverListener {
 
 		int absDelta = Math.abs(delta);
 		final int i = (int) Math.ceil((double) absDelta / 2);
-
-		mHeaderIncremental += i;
+		if (i > 100) {
+			mHeaderIncremental += 50;
+		} else {
+			mHeaderIncremental += i;
+		}
 		if (mHeaderIncremental >= 0) { // && mIncremental <= mMaxHeight
 			setHeaderHeight(mHeaderIncremental);
 			checkHeaderViewState();

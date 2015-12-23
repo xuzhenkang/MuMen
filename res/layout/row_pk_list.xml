@@ -9,7 +9,7 @@
         android:id="@+id/row_pk_text_title"
         android:layout_width="fill_parent"
         android:layout_height="50dip"
-        android:text="PK业绩结果公布"
+        android:text="PK获胜结果公布"
         android:gravity="center"
         android:textSize="16sp"
         android:visibility="gone"/>
@@ -25,7 +25,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:background="#ffffff"
+            android:background="@color/transparent"
             android:gravity="center"
             android:orientation="vertical" >
 
@@ -55,7 +55,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:background="#ffffff"
+            android:background="@color/transparent"
             android:gravity="center"
             android:orientation="vertical" >
 

@@ -1,6 +1,8 @@
 package com.uesugi.mumen.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * BBS实体
@@ -23,12 +25,6 @@ public class TopEntity extends Object implements Serializable {
 	public String city_id = "";
 	public String area_id = "";
 	public String address = "";
-	public String jdkh = "";
-	public String yxkh = "";
-	public String cjkh = "";
-	public String fhb = "";
-	public String proceeds = "";
-	public String date = "";
-	public String posttime = "";
+	public List<ShopDataEntity> report = new ArrayList<ShopDataEntity>();
 
 }

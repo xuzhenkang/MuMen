@@ -2,10 +2,86 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ffffff"
     android:orientation="vertical" >
-    
+
     <include layout="@layout/layout_navigation" />
-    
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dip" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/top_list_txt_city1"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="一级城市"
+                android:textColor="#f5a671"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:layout_width="1px"
+                android:layout_height="14dip"
+                android:layout_gravity="center_vertical"
+                android:background="#757575" />
+
+            <TextView
+                android:id="@+id/top_list_txt_city2"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="二级城市"
+                android:textColor="#757575"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:layout_width="1px"
+                android:layout_height="14dip"
+                android:layout_gravity="center_vertical"
+                android:background="#757575" />
+
+            <TextView
+                android:id="@+id/top_list_txt_city3"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="三级城市"
+                android:textColor="#757575"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:layout_width="1px"
+                android:layout_height="14dip"
+                android:layout_gravity="center_vertical"
+                android:background="#757575" />
+
+            <TextView
+                android:id="@+id/top_list_txt_city4"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="四级城市"
+                android:textColor="#757575"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:background="#bfbfbf" />
+    </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/data_nodata"
         android:layout_width="match_parent"
@@ -62,8 +138,5 @@
         android:divider="@null"
         android:dividerHeight="0dip" >
     </ListView>
-    
-    
-    
 
 </LinearLayout>

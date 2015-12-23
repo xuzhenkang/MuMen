@@ -1,9 +1,11 @@
 package com.uesugi.mumen.user;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import net.tsz.afinal.FinalActivity;
 import net.tsz.afinal.FinalBitmap;
@@ -30,6 +32,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.uesugi.mumen.R;
@@ -44,6 +47,7 @@ import com.uesugi.mumen.pulldown.PullDownView.OnPullDownListener;
 import com.uesugi.mumen.utils.Constants;
 import com.uesugi.mumen.utils.RemoteUtils;
 import com.uesugi.mumen.utils.ShowAlertDialog;
+import com.uesugi.mumen.utils.StringUtils;
 import com.uesugi.mumen.utils.WHTTHttpRequestCallBack;
 
 /**
@@ -120,22 +124,21 @@ public class ShopActivity extends FinalActivity {
 	private LinearLayout mLayoutInfo;
 	@ViewInject(id = R.id.shop_txt_x, click = "btnInfoBg")
 	private TextView mTextX;
-	@ViewInject(id = R.id.shop_txt_info1)
-	private TextView mTextInfo1;
-	@ViewInject(id = R.id.shop_txt_info2)
-	private TextView mTextInfo2;
-	@ViewInject(id = R.id.shop_txt_info3)
-	private TextView mTextInfo3;
-	@ViewInject(id = R.id.shop_txt_info4)
-	private TextView mTextInfo4;
-	@ViewInject(id = R.id.shop_txt_info5)
-	private TextView mTextInfo5;
 
 	@ViewInject(id = R.id.shop_txt_search, click = "btnSearch")
 	private TextView mTextSearch;
 
 	@ViewInject(id = R.id.shop_txt_date)
 	private TextView mTextDate;
+
+	@ViewInject(id = R.id.shop_layout_info_main)
+	private LinearLayout mLayoutInfoMain;
+	@ViewInject(id = R.id.shop_layout_info_scr)
+	private ScrollView mLayoutInfoScr;
+
+	private List<TextView> mTextNameViews = new ArrayList<TextView>();
+	private List<TextView> mTextInfoViews = new ArrayList<TextView>();
+	private List<TextView> mTextUnitViews = new ArrayList<TextView>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -393,11 +396,49 @@ public class ShopActivity extends FinalActivity {
 	public void showInfoBg(TopEntity entity) {
 
 		mLayoutInfoBg.setVisibility(View.VISIBLE);
-		mTextInfo1.setText(entity.jdkh);
-		mTextInfo2.setText(entity.yxkh);
-		mTextInfo3.setText(entity.cjkh);
-		mTextInfo4.setText(entity.fhb);
-		mTextInfo5.setText(entity.proceeds);
+
+		if (mTextNameViews.size() == 0) {
+			for (int i = 0; i < entity.report.size(); i++) {
+				LinearLayout view = (LinearLayout) LayoutInflater
+						.from(mContext).inflate(R.layout.row_shop_sxhb_list,
+								null);
+				TextView name = (TextView) view
+						.findViewById(R.id.row_shop_xshb_txt_name);
+				TextView info = (TextView) view
+						.findViewById(R.id.row_shop_xshb_txt_info);
+				TextView unit = (TextView) view
+						.findViewById(R.id.row_shop_xshb_txt_unit);
+				name.setText(entity.report.get(i).title);
+				if (StringUtils.isBlank(entity.report.get(i).value)) {
+					info.setText("0");
+				}else{
+					info.setText(entity.report.get(i).value);
+				}
+				unit.setText(entity.report.get(i).unit);
+
+				mTextNameViews.add(name);
+
+				mTextInfoViews.add(info);
+
+				mTextUnitViews.add(unit);
+
+				mLayoutInfoMain.addView(view);
+
+			}
+		} else {
+			mLayoutInfoScr.scrollTo(0, 0);
+			for (int i = 0; i < mTextNameViews.size(); i++) {
+				mTextNameViews.get(i).setText(entity.report.get(i).title);
+				if (StringUtils.isBlank(entity.report.get(i).value)) {
+					mTextInfoViews.get(i).setText("0");
+				}else{
+					mTextInfoViews.get(i).setText(entity.report.get(i).value);
+				}
+				
+				mTextUnitViews.get(i).setText(entity.report.get(i).unit);
+			}
+		}
+
 	}
 
 	public void getArea() {
@@ -430,4 +471,5 @@ public class ShopActivity extends FinalActivity {
 			}
 		});
 	}
+
 }

@@ -112,6 +112,7 @@ public class DownloadActivity extends Activity {
 		public void onRequestDownloadUrlFailed(String uu, String vu, String msg) {
 			Toast.makeText(getApplication(), msg, Toast.LENGTH_SHORT).show();
 		}
+
 	};
 
 	private void notifyData() {

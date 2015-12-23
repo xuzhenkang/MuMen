@@ -16,6 +16,7 @@ import com.uesugi.mumen.expand.ExpandActivity;
 import com.uesugi.mumen.promotion.PromotionActivity;
 import com.uesugi.mumen.sales.SalesActivity;
 import com.uesugi.mumen.top.TopActivity;
+import com.uesugi.mumen.user.LoginActivity;
 import com.uesugi.mumen.user.UserActivity;
 import com.uesugi.mumen.utils.Constants;
 import com.uesugi.mumen.utils.FileUtils;
@@ -70,8 +71,13 @@ public class MainActivity extends TabActivity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
+		Constants.mainActivity = this;
 		mContext = this;
-		
+		boolean exitFlag = getIntent().getBooleanExtra("flag", false);
+		if (exitFlag) {
+			System.exit(0);
+		}
+
 		FileUtils.createParentPath(Constants.IMAGE_CACHE_PATH);
 		FileUtils.createParentPath(Constants.IMAGE_EDIT_PATH);
 
@@ -88,8 +94,14 @@ public class MainActivity extends TabActivity implements OnClickListener {
 		Constants.width5_1 = dm.widthPixels / 5;
 		// Constants.userCityEntity = UserPreferences.loadCityPref(mContext);
 		initView();
-		
-		
+
+	}
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		Constants.mainActivity = null;
 	}
 
 	@Override
@@ -311,5 +323,28 @@ public class MainActivity extends TabActivity implements OnClickListener {
 	// }
 	//
 	// }
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
 
+		if (requestCode == Constants.REQUEST_USER_LOGIN) {
+
+			if (resultCode == RESULT_CANCELED) {
+				System.exit(0);
+			} else if (resultCode == RESULT_OK) {
+
+				System.exit(0);
+
+			}
+
+		}
+	}
+
+	public void logout() {
+		Intent intent = new Intent();
+		intent.setClass(mContext, SplashActivity.class);
+		startActivity(intent);
+		finish();
+
+	}
 }

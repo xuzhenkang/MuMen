@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
+import com.uesugi.mumen.entity.ShopDataEntity;
 import com.uesugi.mumen.entity.TopEntity;
 import com.uesugi.mumen.entity.TopListEntity;
 
@@ -50,13 +51,30 @@ public class TopListJosnParser {
 						itemEntity.city_id = itemOjbect.getString("city_id");
 						itemEntity.area_id = itemOjbect.getString("area_id");
 						itemEntity.address = itemOjbect.getString("address");
-						itemEntity.jdkh = itemOjbect.getString("jdkh");
-						itemEntity.yxkh = itemOjbect.getString("yxkh");
-						itemEntity.cjkh = itemOjbect.getString("cjkh");
-						itemEntity.fhb = itemOjbect.getString("fhb");
-						itemEntity.proceeds = itemOjbect.getString("proceeds");
-						itemEntity.date = itemOjbect.getString("date");
-						itemEntity.posttime = itemOjbect.getString("posttime");
+						try {
+							JSONArray reportArray = itemOjbect
+									.getJSONArray("report");
+							for (int j = 0; j < reportArray.length(); j++) {
+								JSONObject itemOjbectX = reportArray
+										.getJSONObject(j);
+								ShopDataEntity itemEntityX = new ShopDataEntity();
+								itemEntityX.id = itemOjbectX.getString("id");
+								itemEntityX.field = itemOjbectX
+										.getString("field");
+								itemEntityX.title = itemOjbectX
+										.getString("title");
+								itemEntityX.value = itemOjbectX
+										.getString("value");
+								itemEntityX.unit = itemOjbectX
+										.getString("unit");
+								itemEntity.report.add(itemEntityX);
+							}
+
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							// e.printStackTrace();
+							Log.e(TAG, "reportArray parser:" + e.toString());
+						}
 
 						entity.list.add(itemEntity);
 					}

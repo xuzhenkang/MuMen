@@ -45,7 +45,15 @@ public class PicListJosnParser {
 						itemEntity.id = itemOjbect.getString("id");
 						itemEntity.title = itemOjbect.getString("title");
 						itemEntity.pic = itemOjbect.getString("pic");
+						try {
 						itemEntity.url = itemOjbect.getString("url");
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							// e.printStackTrace();
+							// Log.e(TAG, "parser:" + e.toString());
+						}
+
+						
 						entity.list.add(itemEntity);
 					}
 				} catch (JSONException e) {

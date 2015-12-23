@@ -15,8 +15,9 @@ package com.uesugi.mumen;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 
-import com.lecloud.common.cde.LeCloud;
+import com.uesugi.mumen.utils.Constants;
 
 public class MuMenApplication extends Application {
 
@@ -28,7 +29,7 @@ public class MuMenApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-//		LeCloud.init(getApplicationContext());
+		// LeCloud.init(getApplicationContext());
 		applicationContext = this;
 		instance = this;
 		// JPushInterface.init(this);
@@ -39,4 +40,15 @@ public class MuMenApplication extends Application {
 		return instance;
 	}
 
+	public void logout() {
+		Constants.entityUser = null;
+		Constants.TOKEN = "";
+		if (Constants.mainActivity != null) {
+			Constants.mainActivity.logout();
+		} else {
+			Intent intent = new Intent();
+			intent.setClass(applicationContext, SplashActivity.class);
+			startActivity(intent);
+		}
+	}
 }

@@ -7,65 +7,109 @@
 
     <include layout="@layout/layout_navigation" />
 
-    <EditText
-        android:background="#ffffff"
-        android:id="@+id/dzys_edit_content"
-        android:layout_width="match_parent"
-        android:layout_height="180dip"
-        android:gravity="top"
-        android:hint="请输入验收内容"
-        android:paddingBottom="20dip"
-        android:paddingLeft="15dip"
-        android:paddingRight="15dip"
-        android:paddingTop="20dip"
-        android:textColor="#757575"
-        android:textColorHint="#cdcdcd"
-        android:textSize="14sp" />
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#cdcdcd" />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="120dip"
-        android:orientation="horizontal" >
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
 
-        <RelativeLayout
-            android:layout_width="120dip"
-            android:layout_height="120dip" >
+                <ImageView
+                    android:id="@+id/header_imgv_bg"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/bg_activity_banner" />
 
-            <ImageView
-                android:id="@+id/dzys_imgv_1"
-                android:layout_width="90dip"
-                android:layout_height="90dip"
-                android:layout_centerInParent="true"
-                android:background="@drawable/btn_add"
-                android:scaleType="centerCrop" />
-        </RelativeLayout>
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_margin="10dip"
+                    android:orientation="vertical" >
 
-        <RelativeLayout
-            android:layout_width="120dip"
-            android:layout_height="120dip" >
+                    <ImageView
+                        android:id="@+id/header_imgv_icon"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/img_sales_picture" />
+                </LinearLayout>
+            </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/dzys_imgv_2"
-                android:layout_width="90dip"
-                android:layout_height="90dip"
-                android:layout_centerInParent="true"
-                android:background="@drawable/btn_add"
-                android:scaleType="centerCrop"
-                android:visibility="gone" />
-        </RelativeLayout>
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dip"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:layout_marginTop="10dip"
+                android:orientation="vertical" >
 
-    <ImageButton
-        android:id="@+id/dzys_btn_ok"
-        android:layout_width="267dip"
-        android:layout_height="40dip"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dip"
-        android:background="@drawable/btn_fabu" />
+                <RelativeLayout
+                    android:id="@+id/dzys_layout_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="110dip" >
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="fill_parent"
+                        android:background="@drawable/bg_forms_xshb" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="fill_parent"
+                        android:orientation="vertical" >
+
+                        <LinearLayout
+                            android:id="@+id/dzys_layout_main"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical" >
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="50dip" >
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="20dip"
+                                android:text="上传："
+                                android:textColor="#757575"
+                                android:textSize="14sp" />
+
+                            <ImageView
+                                android:id="@+id/dzys_imgv_photo"
+                                android:layout_width="114dip"
+                                android:layout_height="40dip"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="120dip"
+                                android:background="@drawable/btn_upload" />
+                        </RelativeLayout>
+
+                        <ImageButton
+                            android:id="@+id/dzys_btn_ok"
+                            android:layout_width="267dip"
+                            android:layout_height="40dip"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="10dip"
+                            android:background="@drawable/btn_fabu" />
+
+                        <View
+                            android:layout_width="fill_parent"
+                            android:layout_height="10dip" />
+                    </LinearLayout>
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

@@ -112,17 +112,17 @@ public class HyActivity extends FinalActivity {
 		mContext = this;
 		flag = getIntent().getBooleanExtra("flag", false);
 		initView();
-//		if (flag) {
-//			mPicurlList.add("sp1");
-//			mPicurlList.add("sp2");
-//			mPicurlList.add("sp3");
-//			mPicurlList.add("sp4");
-//			mPicurlList.add("xx");
-//			setHD();
-//		} else {
+		if (flag) {
+			mPicurlList.add("sp1");
+			mPicurlList.add("sp2");
+			mPicurlList.add("sp3");
+			mPicurlList.add("sp4");
+			mPicurlList.add("xx");
+			setHD();
+		} else {
 
 			getList();
-//		}
+		}
 	}
 
 	public void btnLeft(View v) {

@@ -10,6 +10,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import com.uesugi.mumen.user.LoginActivity;
 import com.uesugi.mumen.utils.Constants;
 
 public class SplashActivity extends Activity {
@@ -31,10 +32,10 @@ public class SplashActivity extends Activity {
 		getWindowManager().getDefaultDisplay().getMetrics(dm);// 获取分辨率
 		Constants.width = dm.widthPixels;
 		Constants.width5_1 = dm.widthPixels / 5;
-//		Constants.userCityEntity = UserPreferences.loadCityPref(mContext);
-//		mImgVLou = (ImageView) this.findViewById(R.id.sp_imgv_lou);
-//		mImgVLou.setLayoutParams(new RelativeLayout.LayoutParams(
-//				Constants.width, (int) ((float) Constants.width * 0.46f)));
+		// Constants.userCityEntity = UserPreferences.loadCityPref(mContext);
+		// mImgVLou = (ImageView) this.findViewById(R.id.sp_imgv_lou);
+		// mImgVLou.setLayoutParams(new RelativeLayout.LayoutParams(
+		// Constants.width, (int) ((float) Constants.width * 0.46f)));
 		statrRun();
 	}
 
@@ -42,6 +43,50 @@ public class SplashActivity extends Activity {
 
 		new Handler().postDelayed(new Runnable() {
 			public void run() {
+				checkLogin();
+				// System.exit(0);
+				// Intent i = new Intent(SplashActivity.this,
+				// MainActivity.class);
+				//
+				// SplashActivity.this.startActivity(i); // 启动Main界面
+				// SplashActivity.this.finish(); // 关闭自己这个开场屏
+
+			}
+
+		}, 2000); // 2秒，够用了吧
+	}
+
+	// @Override
+	// protected void onResume() {
+	// super.onResume();
+	// JPushInterface.onResume(mContext);
+	// }
+	//
+	// @Override
+	// protected void onPause() {
+	// // TODO Auto-generated method stub
+	// super.onPause();
+	// JPushInterface.onPause(mContext);
+	// }
+
+	private void checkLogin() {
+		Intent i = new Intent();
+		i.setClass(mContext, LoginActivity.class);
+		startActivityForResult(i, Constants.REQUEST_USER_LOGIN);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if (requestCode == Constants.REQUEST_USER_LOGIN) {
+
+			if (resultCode == RESULT_CANCELED) {
+				Intent i = new Intent(SplashActivity.this, MainActivity.class);
+				i.putExtra("flag", true);
+				SplashActivity.this.startActivity(i); // 启动Main界面
+				SplashActivity.this.finish(); // 关闭自己这个开场屏
+			} else if (resultCode == RESULT_OK) {
 
 				Intent i = new Intent(SplashActivity.this, MainActivity.class);
 
@@ -50,19 +95,6 @@ public class SplashActivity extends Activity {
 
 			}
 
-		}, 2000); // 2秒，够用了吧
+		}
 	}
-
-//	@Override
-//	protected void onResume() {
-//		super.onResume();
-//		JPushInterface.onResume(mContext);
-//	}
-//
-//	@Override
-//	protected void onPause() {
-//		// TODO Auto-generated method stub
-//		super.onPause();
-//		JPushInterface.onPause(mContext);
-//	}
 }

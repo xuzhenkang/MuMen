@@ -25,6 +25,8 @@ import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +35,7 @@ import com.uesugi.mumen.entity.HyUserEntity;
 import com.uesugi.mumen.entity.LoginEntity;
 import com.uesugi.mumen.entity.TestEntity;
 import com.uesugi.mumen.utils.Constants;
+import com.uesugi.mumen.utils.DisplayUtil;
 import com.uesugi.mumen.utils.RemoteUtils;
 import com.uesugi.mumen.utils.ShowAlertDialog;
 import com.uesugi.mumen.utils.StringUtils;
@@ -66,7 +69,8 @@ public class LoginActivity extends FinalActivity {
 	@ViewInject(id = R.id.login_txt_yanzheng, click = "btnVerifiy")
 	private TextView mTextVerifiy;
 	private ShowAlertDialog mDialog = null;
-
+	@ViewInject(id = R.id.login_imgv_icon)
+	private ImageView mImgVIcon;
 	private Timer mTimer = null;
 	private TimerTask mTimerTask = null;
 	private int mTimeNum = 0;
@@ -96,6 +100,9 @@ public class LoginActivity extends FinalActivity {
 	private void initView() {
 
 		mDialog = new ShowAlertDialog(mContext);
+
+		mImgVIcon.setLayoutParams(new RelativeLayout.LayoutParams(
+				Constants.width, (int) (Constants.width * 1.02f)));
 
 		mTextTopTitle.setText("登录");
 		// mTopBtnLeft.setVisibility(View.VISIBLE);
@@ -178,7 +185,7 @@ public class LoginActivity extends FinalActivity {
 					// UserPreferences.saveUserPref(mContext, entity.l_user);
 					Toast.makeText(mContext, "发送成功！", Toast.LENGTH_SHORT)
 							.show();
-					mEdtVerifiy.setText(entity.verify);
+//					mEdtVerifiy.setText(entity.verify);
 					mTimeNum = 60;
 					timerStart();
 				}
@@ -377,10 +384,7 @@ public class LoginActivity extends FinalActivity {
 				public void onClick(DialogInterface dialog, int which) {
 					// TODO Auto-generated method stub
 
-					setResult(RESULT_CANCELED);
-
-					System.exit(0);
-
+					goback();
 				}
 
 			});
@@ -393,5 +397,10 @@ public class LoginActivity extends FinalActivity {
 
 		return super.onKeyDown(keyCode, event);
 
+	}
+
+	public void goback() {
+		setResult(RESULT_CANCELED);
+		finish();
 	}
 }

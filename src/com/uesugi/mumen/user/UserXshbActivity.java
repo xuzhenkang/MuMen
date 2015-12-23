@@ -1,15 +1,19 @@
 package com.uesugi.mumen.user;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import net.tsz.afinal.FinalActivity;
 import net.tsz.afinal.annotation.view.ViewInject;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
@@ -21,8 +25,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import cn.sharesdk.framework.authorize.f;
+
 import com.uesugi.mumen.R;
 import com.uesugi.mumen.entity.BaseEntity;
+import com.uesugi.mumen.entity.FieldListEntity;
+import com.uesugi.mumen.entity.ShopDataListEntity;
 import com.uesugi.mumen.utils.Constants;
 import com.uesugi.mumen.utils.DisplayUtil;
 import com.uesugi.mumen.utils.RemoteUtils;
@@ -78,20 +86,23 @@ public class UserXshbActivity extends FinalActivity {
 	@ViewInject(id = R.id.header_imgv_icon)
 	private ImageView mImgVHIcon;
 
-	@ViewInject(id = R.id.xshb_edit_1)
-	private EditText mEdit1;
-	@ViewInject(id = R.id.xshb_edit_2)
-	private EditText mEdit2;
-	@ViewInject(id = R.id.xshb_edit_3)
-	private EditText mEdit3;
-	@ViewInject(id = R.id.xshb_edit_4)
-	private EditText mEdit4;
-	@ViewInject(id = R.id.xshb_edit_5)
-	private EditText mEdit5;
 	@ViewInject(id = R.id.xshb_btn_ok, click = "btnOk")
 	private ImageButton mBtnOk;
 	@ViewInject(id = R.id.xshb_txt_date)
 	private TextView mTextDate;
+
+	private FieldListEntity mEntity = null;
+	private ShopDataListEntity mShopDataListEntity = null;
+
+	private List<String> mNameList = new ArrayList<String>();
+	private List<String> mContentList = new ArrayList<String>();
+
+	@ViewInject(id = R.id.xshb_layout_bg)
+	private RelativeLayout mLayoutBg;
+	@ViewInject(id = R.id.xshb_layout_main)
+	private LinearLayout mLayoutMain;
+
+	private List<EditText> mEditList = new ArrayList<EditText>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -100,12 +111,16 @@ public class UserXshbActivity extends FinalActivity {
 		setContentView(R.layout.activity_user_xshb);
 
 		mContext = this;
-
+		mLayoutBg.setVisibility(View.GONE);
 		initView();
-
+		getField();
 	}
 
 	public void btnLeft(View v) {
+		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		for (int i = 0; i < mEditList.size(); i++) {
+			imm.hideSoftInputFromWindow(mEditList.get(i).getWindowToken(), 0);
+		}
 		finish();
 	}
 
@@ -142,42 +157,27 @@ public class UserXshbActivity extends FinalActivity {
 
 	public void btnOk(View v) {
 
-		String jdkh = mEdit1.getText().toString();
-		String yxkh = mEdit2.getText().toString();
-		String cjkh = mEdit3.getText().toString();
-		String fhb = mEdit4.getText().toString();
-		String proceeds = mEdit5.getText().toString();
+		mContentList.clear();
+		mNameList.clear();
+		for (int i = 0; i < mEditList.size(); i++) {
+			String content = mEditList.get(i).getText().toString();
+			if (StringUtils.isBlank(content)) {
+				Toast.makeText(mContext,
+						"请输入" + mEntity.list.get(i).title + "!",
+						Toast.LENGTH_SHORT).show();
+				return;
+			}
 
-		if (StringUtils.isBlank(jdkh)) {
-			Toast.makeText(mContext, "请输入进店客户!", Toast.LENGTH_SHORT).show();
-			return;
+			mContentList.add(content);
+			mNameList.add(mEntity.list.get(i).field);
 		}
-		if (StringUtils.isBlank(yxkh)) {
-			Toast.makeText(mContext, "请输入意向客户!", Toast.LENGTH_SHORT).show();
-			return;
-		}
-		if (StringUtils.isBlank(cjkh)) {
-			Toast.makeText(mContext, "请输入成交客户!", Toast.LENGTH_SHORT).show();
-			return;
-		}
-		if (StringUtils.isBlank(fhb)) {
-			Toast.makeText(mContext, "请输入发红包数!", Toast.LENGTH_SHORT).show();
-			return;
-		}
-		if (StringUtils.isBlank(proceeds)) {
-			Toast.makeText(mContext, "请输入当天实际收款!", Toast.LENGTH_SHORT).show();
-			return;
-		}
-
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(mEdit1.getWindowToken(), 0);
-		imm.hideSoftInputFromWindow(mEdit2.getWindowToken(), 0);
-		imm.hideSoftInputFromWindow(mEdit3.getWindowToken(), 0);
-		imm.hideSoftInputFromWindow(mEdit4.getWindowToken(), 0);
-		imm.hideSoftInputFromWindow(mEdit5.getWindowToken(), 0);
+		for (int i = 0; i < mEditList.size(); i++) {
+			imm.hideSoftInputFromWindow(mEditList.get(i).getWindowToken(), 0);
+		}
 		mDialog.showProgressDlg(Constants.MESSAGE_PROGRESS);
 
-		RemoteUtils.setXshb(jdkh, yxkh, cjkh, fhb, proceeds,
+		RemoteUtils.setXshb(mContentList, mNameList,
 				new WHTTHttpRequestCallBack() {
 
 					@Override
@@ -203,5 +203,96 @@ public class UserXshbActivity extends FinalActivity {
 
 					}
 				});
+	}
+
+	public void getField() {
+
+		mDialog.showProgressDlg(Constants.MESSAGE_PROGRESS);
+		RemoteUtils.getFieldListHB(new WHTTHttpRequestCallBack() {
+
+			@Override
+			public void result(Object obj) {
+				// TODO Auto-generated method stub
+
+				FieldListEntity entity = (FieldListEntity) obj;
+
+				if (!entity.success) {
+					mDialog.dismissProgressDlg();
+					Toast.makeText(mContext, entity.msg, Toast.LENGTH_SHORT)
+							.show();
+
+				} else {
+					mEntity = entity;
+					initField();
+				}
+
+			}
+		});
+
+	}
+
+	private void initField() {
+
+		Log.e("mEntity.list.size() * 50 + 110",
+				(mEntity.list.size() * 50 + 110) + "");
+
+		mLayoutBg.setLayoutParams(new LinearLayout.LayoutParams(Constants.width
+				- DisplayUtil.dip2px(mContext, 20), DisplayUtil.dip2px(
+				mContext, mEntity.list.size() * 50 + 150)));
+		for (int i = 0; i < mEntity.list.size(); i++) {
+			LinearLayout view = (LinearLayout) LayoutInflater.from(mContext)
+					.inflate(R.layout.row_field_list, null);
+			TextView name = (TextView) view
+					.findViewById(R.id.row_field_txt_name);
+			EditText content = (EditText) view
+					.findViewById(R.id.row_field_edit_content);
+			name.setText(mEntity.list.get(i).title + ":");
+			content.setHint("请输入" + mEntity.list.get(i).title + "!");
+			mEditList.add(content);
+
+			mLayoutMain.addView(view);
+
+		}
+		mLayoutBg.setVisibility(View.VISIBLE);
+		getShopDataList();
+	}
+
+	public void getShopDataList() {
+
+		// mDialog.showProgressDlg(Constants.MESSAGE_PROGRESS);
+		RemoteUtils.getShopDataList(new WHTTHttpRequestCallBack() {
+
+			@Override
+			public void result(Object obj) {
+				// TODO Auto-generated method stub
+
+				mDialog.dismissProgressDlg();
+
+				ShopDataListEntity entity = (ShopDataListEntity) obj;
+
+				if (!entity.success) {
+					// Toast.makeText(mContext, entity.msg, Toast.LENGTH_SHORT)
+					// .show();
+
+				} else {
+					mShopDataListEntity = entity;
+					initFieldData();
+				}
+
+			}
+		});
+
+	}
+
+	private void initFieldData() {
+		for (int i = 0; i < mEditList.size(); i++) {
+			for (int j = 0; j < mShopDataListEntity.list.size(); j++) {
+				if (mEntity.list.get(i).field.equals(mShopDataListEntity.list
+						.get(j).field)) {
+					mEditList.get(i).setText(
+							mShopDataListEntity.list.get(j).value);
+				}
+			}
+		}
 	}
 }

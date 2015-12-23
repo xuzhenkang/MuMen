@@ -97,6 +97,26 @@ public class TopActivity extends FinalActivity {
 	@ViewInject(id = R.id.top_txt_tab5, click = "btnTab5")
 	private TextView mTextTab5;
 
+	@ViewInject(id = R.id.top_txt_city1, click = "btnCity1")
+	private TextView mTextCity1;
+	@ViewInject(id = R.id.top_txt_city2, click = "btnCity2")
+	private TextView mTextCity2;
+	@ViewInject(id = R.id.top_txt_city3, click = "btnCity3")
+	private TextView mTextCity3;
+	@ViewInject(id = R.id.top_txt_city4, click = "btnCity4")
+	private TextView mTextCity4;
+
+	@ViewInject(id = R.id.top_imgv_tri1)
+	private ImageView mImgVTri1;
+	@ViewInject(id = R.id.top_imgv_tri2)
+	private ImageView mImgVTri2;
+	@ViewInject(id = R.id.top_imgv_tri3)
+	private ImageView mImgVTri3;
+	@ViewInject(id = R.id.top_imgv_tri4)
+	private ImageView mImgVTri4;
+	@ViewInject(id = R.id.top_imgv_tri5)
+	private ImageView mImgVTri5;
+
 	@ViewInject(id = R.id.top_layout_1)
 	private RelativeLayout mLayoutTab1;
 	@ViewInject(id = R.id.top_layout_2)
@@ -147,6 +167,8 @@ public class TopActivity extends FinalActivity {
 	private boolean mFlagLoading3 = false;
 
 	private RelativeLayout mViewFoot3 = null;
+
+	private String city_type = "1";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -249,6 +271,14 @@ public class TopActivity extends FinalActivity {
 	}
 
 	private void setGroup1(TopListEntity entity) {
+		if (entity == null || entity.list.size() == 0) {
+			mGroup1.removeAllViews();
+			mImgVIcon.setImageBitmap(mDefaultBitmap);
+			mTextRank.setText("");
+			mTextName.setText("");
+			return;
+		}
+
 		mGroup1.removeAllViews();
 		num1 = new TextView[entity.list.size()];
 		name1 = new TextView[entity.list.size()];
@@ -306,6 +336,7 @@ public class TopActivity extends FinalActivity {
 		}
 
 		setImageBackground1(0);
+
 	}
 
 	public void setImageBackground1(int selectItems) {
@@ -399,6 +430,98 @@ public class TopActivity extends FinalActivity {
 		}
 	}
 
+	public void btnCity1(View v) {
+		if (city_type.equals("1")) {
+			return;
+		}
+
+		mTextCity1.setTextColor(Color.parseColor("#f5a671"));
+		mTextCity2.setTextColor(Color.parseColor("#757575"));
+		mTextCity3.setTextColor(Color.parseColor("#757575"));
+		mTextCity4.setTextColor(Color.parseColor("#757575"));
+		city_type = "1";
+
+		if (index.equals("1")) {
+			getList1();
+		} else if (index.equals("2")) {
+			getList2();
+		} else if (index.equals("3")) {
+			getList3();
+		} else if (index.equals("4")) {
+			getList4();
+		}
+
+	}
+
+	public void btnCity2(View v) {
+		if (city_type.equals("2")) {
+			return;
+		}
+
+		mTextCity2.setTextColor(Color.parseColor("#f5a671"));
+		mTextCity1.setTextColor(Color.parseColor("#757575"));
+		mTextCity3.setTextColor(Color.parseColor("#757575"));
+		mTextCity4.setTextColor(Color.parseColor("#757575"));
+		city_type = "2";
+
+		if (index.equals("1")) {
+			getList1();
+		} else if (index.equals("2")) {
+			getList2();
+		} else if (index.equals("3")) {
+			getList3();
+		} else if (index.equals("4")) {
+			getList4();
+		}
+
+	}
+
+	public void btnCity3(View v) {
+		if (city_type.equals("3")) {
+			return;
+		}
+
+		mTextCity3.setTextColor(Color.parseColor("#f5a671"));
+		mTextCity2.setTextColor(Color.parseColor("#757575"));
+		mTextCity1.setTextColor(Color.parseColor("#757575"));
+		mTextCity4.setTextColor(Color.parseColor("#757575"));
+		city_type = "3";
+
+		if (index.equals("1")) {
+			getList1();
+		} else if (index.equals("2")) {
+			getList2();
+		} else if (index.equals("3")) {
+			getList3();
+		} else if (index.equals("4")) {
+			getList4();
+		}
+
+	}
+
+	public void btnCity4(View v) {
+		if (city_type.equals("4")) {
+			return;
+		}
+
+		mTextCity4.setTextColor(Color.parseColor("#f5a671"));
+		mTextCity2.setTextColor(Color.parseColor("#757575"));
+		mTextCity3.setTextColor(Color.parseColor("#757575"));
+		mTextCity1.setTextColor(Color.parseColor("#757575"));
+		city_type = "4";
+
+		if (index.equals("1")) {
+			getList1();
+		} else if (index.equals("2")) {
+			getList2();
+		} else if (index.equals("3")) {
+			getList3();
+		} else if (index.equals("4")) {
+			getList4();
+		}
+
+	}
+
 	public void btnTab1(View v) {
 		index = "1";
 		mTextTab1.setTextColor(Color.parseColor("#f5a671"));
@@ -406,15 +529,31 @@ public class TopActivity extends FinalActivity {
 		mTextTab3.setTextColor(Color.parseColor("#757575"));
 		mTextTab4.setTextColor(Color.parseColor("#757575"));
 		mTextTab5.setTextColor(Color.parseColor("#757575"));
+
+		mImgVTri1.setVisibility(View.VISIBLE);
+		mImgVTri2.setVisibility(View.GONE);
+		mImgVTri3.setVisibility(View.GONE);
+		mImgVTri4.setVisibility(View.GONE);
+		mImgVTri5.setVisibility(View.GONE);
+
 		mLayoutTab1.setVisibility(View.VISIBLE);
 		mLayoutTab2.setVisibility(View.GONE);
 		mTextPaihang.setText("周度销量排行榜");
-		if (mEntity1 == null) {
-			getList1();
-		} else {
-
-			setGroup1(mEntity1);
-		}
+		// if (mEntity1 == null) {
+		mTextCity1.setTextColor(Color.parseColor("#f5a671"));
+		mTextCity2.setTextColor(Color.parseColor("#757575"));
+		mTextCity3.setTextColor(Color.parseColor("#757575"));
+		mTextCity4.setTextColor(Color.parseColor("#757575"));
+		city_type = "1";
+		getList1();
+		// } else {
+		// mTextCity1.setTextColor(Color.parseColor("#f5a671"));
+		// mTextCity2.setTextColor(Color.parseColor("#757575"));
+		// mTextCity3.setTextColor(Color.parseColor("#757575"));
+		// mTextCity4.setTextColor(Color.parseColor("#757575"));
+		// city_type="1";
+		// setGroup1(mEntity1);
+		// }
 	}
 
 	public void btnTab2(View v) {
@@ -424,15 +563,31 @@ public class TopActivity extends FinalActivity {
 		mTextTab3.setTextColor(Color.parseColor("#757575"));
 		mTextTab4.setTextColor(Color.parseColor("#757575"));
 		mTextTab5.setTextColor(Color.parseColor("#757575"));
+
+		mImgVTri2.setVisibility(View.VISIBLE);
+		mImgVTri1.setVisibility(View.GONE);
+		mImgVTri3.setVisibility(View.GONE);
+		mImgVTri4.setVisibility(View.GONE);
+		mImgVTri5.setVisibility(View.GONE);
+
 		mLayoutTab1.setVisibility(View.VISIBLE);
 		mLayoutTab2.setVisibility(View.GONE);
 		mTextPaihang.setText("月度销量排行榜");
-		if (mEntity2 == null) {
-			getList2();
-		} else {
-
-			setGroup1(mEntity2);
-		}
+		// if (mEntity2 == null) {
+		mTextCity1.setTextColor(Color.parseColor("#f5a671"));
+		mTextCity2.setTextColor(Color.parseColor("#757575"));
+		mTextCity3.setTextColor(Color.parseColor("#757575"));
+		mTextCity4.setTextColor(Color.parseColor("#757575"));
+		city_type = "1";
+		getList2();
+		// } else {
+		// mTextCity1.setTextColor(Color.parseColor("#f5a671"));
+		// mTextCity2.setTextColor(Color.parseColor("#757575"));
+		// mTextCity3.setTextColor(Color.parseColor("#757575"));
+		// mTextCity4.setTextColor(Color.parseColor("#757575"));
+		// city_type="1";
+		// setGroup1(mEntity2);
+		// }
 	}
 
 	public void btnTab3(View v) {
@@ -444,13 +599,29 @@ public class TopActivity extends FinalActivity {
 		mTextTab5.setTextColor(Color.parseColor("#757575"));
 		mLayoutTab1.setVisibility(View.VISIBLE);
 		mLayoutTab2.setVisibility(View.GONE);
-		mTextPaihang.setText("季度销量排行榜");
-		if (mEntity3 == null) {
-			getList3();
-		} else {
 
-			setGroup1(mEntity3);
-		}
+		mImgVTri3.setVisibility(View.VISIBLE);
+		mImgVTri2.setVisibility(View.GONE);
+		mImgVTri1.setVisibility(View.GONE);
+		mImgVTri4.setVisibility(View.GONE);
+		mImgVTri5.setVisibility(View.GONE);
+
+		mTextPaihang.setText("季度销量排行榜");
+		// if (mEntity3 == null) {
+		mTextCity1.setTextColor(Color.parseColor("#f5a671"));
+		mTextCity2.setTextColor(Color.parseColor("#757575"));
+		mTextCity3.setTextColor(Color.parseColor("#757575"));
+		mTextCity4.setTextColor(Color.parseColor("#757575"));
+		city_type = "1";
+		getList3();
+		// } else {
+		// mTextCity1.setTextColor(Color.parseColor("#f5a671"));
+		// mTextCity2.setTextColor(Color.parseColor("#757575"));
+		// mTextCity3.setTextColor(Color.parseColor("#757575"));
+		// mTextCity4.setTextColor(Color.parseColor("#757575"));
+		// city_type="1";
+		// setGroup1(mEntity3);
+		// }
 	}
 
 	public void btnTab4(View v) {
@@ -462,13 +633,28 @@ public class TopActivity extends FinalActivity {
 		mTextTab5.setTextColor(Color.parseColor("#757575"));
 		mLayoutTab1.setVisibility(View.VISIBLE);
 		mLayoutTab2.setVisibility(View.GONE);
-		mTextPaihang.setText("年度销量排行榜");
-		if (mEntity4 == null) {
-			getList4();
-		} else {
+		mImgVTri4.setVisibility(View.VISIBLE);
+		mImgVTri2.setVisibility(View.GONE);
+		mImgVTri3.setVisibility(View.GONE);
+		mImgVTri1.setVisibility(View.GONE);
+		mImgVTri5.setVisibility(View.GONE);
 
-			setGroup1(mEntity4);
-		}
+		mTextPaihang.setText("年度销量排行榜");
+		// if (mEntity4 == null) {
+		mTextCity1.setTextColor(Color.parseColor("#f5a671"));
+		mTextCity2.setTextColor(Color.parseColor("#757575"));
+		mTextCity3.setTextColor(Color.parseColor("#757575"));
+		mTextCity4.setTextColor(Color.parseColor("#757575"));
+		city_type = "1";
+		getList4();
+		// } else {
+		// mTextCity1.setTextColor(Color.parseColor("#f5a671"));
+		// mTextCity2.setTextColor(Color.parseColor("#757575"));
+		// mTextCity3.setTextColor(Color.parseColor("#757575"));
+		// mTextCity4.setTextColor(Color.parseColor("#757575"));
+		// city_type="1";
+		// setGroup1(mEntity4);
+		// }
 	}
 
 	public void btnList(View v) {
@@ -487,6 +673,12 @@ public class TopActivity extends FinalActivity {
 		mTextTab1.setTextColor(Color.parseColor("#757575"));
 		mLayoutTab1.setVisibility(View.GONE);
 		mLayoutTab2.setVisibility(View.VISIBLE);
+		mImgVTri5.setVisibility(View.VISIBLE);
+		mImgVTri2.setVisibility(View.GONE);
+		mImgVTri3.setVisibility(View.GONE);
+		mImgVTri4.setVisibility(View.GONE);
+		mImgVTri1.setVisibility(View.GONE);
+
 		if (mEntity5 == null) {
 			getList5();
 		}
@@ -494,7 +686,7 @@ public class TopActivity extends FinalActivity {
 
 	public void getList1() {
 		mDialog.showProgressDlg(Constants.MESSAGE_PROGRESS);
-		RemoteUtils.getTopW(new WHTTHttpRequestCallBack() {
+		RemoteUtils.getTopW(city_type, new WHTTHttpRequestCallBack() {
 
 			@Override
 			public void result(Object obj) {
@@ -519,7 +711,7 @@ public class TopActivity extends FinalActivity {
 
 	public void getList2() {
 		mDialog.showProgressDlg(Constants.MESSAGE_PROGRESS);
-		RemoteUtils.getTopM(new WHTTHttpRequestCallBack() {
+		RemoteUtils.getTopM(city_type, new WHTTHttpRequestCallBack() {
 
 			@Override
 			public void result(Object obj) {
@@ -544,7 +736,7 @@ public class TopActivity extends FinalActivity {
 
 	public void getList3() {
 		mDialog.showProgressDlg(Constants.MESSAGE_PROGRESS);
-		RemoteUtils.getTopQ(new WHTTHttpRequestCallBack() {
+		RemoteUtils.getTopQ(city_type, new WHTTHttpRequestCallBack() {
 
 			@Override
 			public void result(Object obj) {
@@ -569,7 +761,7 @@ public class TopActivity extends FinalActivity {
 
 	public void getList4() {
 		mDialog.showProgressDlg(Constants.MESSAGE_PROGRESS);
-		RemoteUtils.getTopY(new WHTTHttpRequestCallBack() {
+		RemoteUtils.getTopY(city_type, new WHTTHttpRequestCallBack() {
 
 			@Override
 			public void result(Object obj) {
@@ -594,7 +786,7 @@ public class TopActivity extends FinalActivity {
 
 	public void getList5() {
 		mDialog.showProgressDlg(Constants.MESSAGE_PROGRESS);
-		RemoteUtils.getTopW(new WHTTHttpRequestCallBack() {
+		RemoteUtils.getPk(new WHTTHttpRequestCallBack() {
 
 			@Override
 			public void result(Object obj) {

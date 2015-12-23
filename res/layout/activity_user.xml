@@ -243,4 +243,37 @@
             android:background="#dfdfdf" />
     </RelativeLayout>
 
+    
+       <RelativeLayout
+        android:id="@+id/user_layout_exit"
+        android:layout_width="fill_parent"
+        android:layout_height="40dip"
+        android:layout_marginTop="50dip"
+        android:background="@drawable/mm_white2default" >
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:background="#dfdfdf" />
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="40dip"
+            android:text="退出登录"
+            android:textColor="#757575"
+            android:textSize="14sp" />
+
+
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:background="#dfdfdf" />
+    </RelativeLayout>
+    
 </LinearLayout>

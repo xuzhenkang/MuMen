@@ -53,9 +53,11 @@ import com.uesugi.mumen.adapter.ExpandAdapter;
 import com.uesugi.mumen.adapter.ExpandAdapter2;
 import com.uesugi.mumen.entity.ArticleListEntity;
 import com.uesugi.mumen.entity.BaseEntity;
+import com.uesugi.mumen.entity.FieldListEntity;
 import com.uesugi.mumen.entity.PicEntity;
 import com.uesugi.mumen.entity.PicListEntity;
 import com.uesugi.mumen.entity.TitleListEntity;
+import com.uesugi.mumen.entity.UploadEntity;
 import com.uesugi.mumen.promotion.PromotionActivity3;
 import com.uesugi.mumen.pulldown.PullDownView;
 import com.uesugi.mumen.pulldown.PullDownView.OnPullDownListener;
@@ -212,17 +214,16 @@ public class ExpandActivity extends FinalActivity {
 	@ViewInject(id = R.id.expand_imgv_photo, click = "btnPhoto")
 	private ImageView mImgVPhoto;
 
-	@ViewInject(id = R.id.expand_edit_1)
-	private EditText mEdit1;
-	@ViewInject(id = R.id.expand_edit_2)
-	private EditText mEdit2;
-	@ViewInject(id = R.id.expand_edit_3)
-	private EditText mEdit3;
-	@ViewInject(id = R.id.expand_edit_4)
-	private EditText mEdit4;
-	@ViewInject(id = R.id.expand_edit_5)
-	private EditText mEdit5;
+	private FieldListEntity mEntity;
 
+	private List<String> mNameList = new ArrayList<String>();
+	private List<String> mContentList = new ArrayList<String>();
+
+	@ViewInject(id = R.id.wysj_layout_bg)
+	private RelativeLayout mLayoutBg;
+	@ViewInject(id = R.id.wysj_layout_main)
+	private LinearLayout mLayoutMain;
+	private List<EditText> mEditList = new ArrayList<EditText>();
 	@ViewInject(id = R.id.expand_btn_ok, click = "btnOk")
 	private ImageButton mBtnOk;
 
@@ -857,7 +858,10 @@ public class ExpandActivity extends FinalActivity {
 	}
 
 	public void btnTab1(View v) {
-
+		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		for (int i = 0; i < mEditList.size(); i++) {
+			imm.hideSoftInputFromWindow(mEditList.get(i).getWindowToken(), 0);
+		}
 		mTextTab1.setTextColor(Color.parseColor("#f5a671"));
 		mTextTab3.setTextColor(Color.parseColor("#757575"));
 		mTextTab4.setTextColor(Color.parseColor("#757575"));
@@ -871,7 +875,10 @@ public class ExpandActivity extends FinalActivity {
 	}
 
 	public void btnTab3(View v) {
-
+		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		for (int i = 0; i < mEditList.size(); i++) {
+			imm.hideSoftInputFromWindow(mEditList.get(i).getWindowToken(), 0);
+		}
 		mTextTab3.setTextColor(Color.parseColor("#f5a671"));
 		mTextTab1.setTextColor(Color.parseColor("#757575"));
 		mTextTab4.setTextColor(Color.parseColor("#757575"));
@@ -894,9 +901,10 @@ public class ExpandActivity extends FinalActivity {
 		mLayoutTab4.setVisibility(View.VISIBLE);
 		mLayoutTab3.setVisibility(View.GONE);
 		mLayoutTab1.setVisibility(View.GONE);
-
-		if (mPicurlList4.size() == 0) {
-			getPic4();
+		setHD4();
+		if (mEntity == null || mEntity.list.size() == 0) {
+			getField();
+			// getPic4();
 		}
 	}
 
@@ -1370,42 +1378,30 @@ public class ExpandActivity extends FinalActivity {
 
 	public void btnOk(View v) {
 
-		String name = mEdit1.getText().toString();
-		String address = mEdit2.getText().toString();
-		String area = mEdit3.getText().toString();
-		String remark = mEdit4.getText().toString();
-		String phone = mEdit5.getText().toString();
+		mContentList.clear();
+		mNameList.clear();
+		for (int i = 0; i < mEditList.size(); i++) {
+			String content = mEditList.get(i).getText().toString();
+			if (StringUtils.isBlank(content)) {
+				Toast.makeText(mContext,
+						"请输入" + mEntity.list.get(i).title + "!",
+						Toast.LENGTH_SHORT).show();
+				return;
+			}
 
-		if (StringUtils.isBlank(name)) {
-			Toast.makeText(mContext, "请输入申请人姓名!", Toast.LENGTH_SHORT).show();
-			return;
-		}
-		if (StringUtils.isBlank(address)) {
-			Toast.makeText(mContext, "请输入店铺位置!", Toast.LENGTH_SHORT).show();
-			return;
-		}
-		if (StringUtils.isBlank(area)) {
-			Toast.makeText(mContext, "请输入店面面积!", Toast.LENGTH_SHORT).show();
-			return;
-		}
-		if (StringUtils.isBlank(remark)) {
-			Toast.makeText(mContext, "请输入补充说明!", Toast.LENGTH_SHORT).show();
-			return;
-		}
-		if (StringUtils.isBlank(phone)) {
-			Toast.makeText(mContext, "请输入联系方式!", Toast.LENGTH_SHORT).show();
-			return;
+			mContentList.add(content);
+			mNameList.add(mEntity.list.get(i).field);
 		}
 
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(mEdit1.getWindowToken(), 0);
-		imm.hideSoftInputFromWindow(mEdit2.getWindowToken(), 0);
-		imm.hideSoftInputFromWindow(mEdit3.getWindowToken(), 0);
-		imm.hideSoftInputFromWindow(mEdit4.getWindowToken(), 0);
-		imm.hideSoftInputFromWindow(mEdit5.getWindowToken(), 0);
+		for (int i = 0; i < mEditList.size(); i++) {
+			imm.hideSoftInputFromWindow(mEditList.get(i).getWindowToken(), 0);
+		}
 		mDialog.showProgressDlg(Constants.MESSAGE_PROGRESS);
-
-		RemoteUtils.upDateAdd(name, address, area, remark, phone,
+		if (Constants.uploadEntity == null) {
+			Constants.uploadEntity = new UploadEntity();
+		}
+		RemoteUtils.upDateAdd(mContentList, mNameList,
 				Constants.uploadEntity.imgs, new WHTTHttpRequestCallBack() {
 
 					@Override
@@ -1425,11 +1421,10 @@ public class ExpandActivity extends FinalActivity {
 							// entity.l_user);
 							Toast.makeText(mContext, "提交成功！",
 									Toast.LENGTH_SHORT).show();
-							mEdit1.setText("");
-							mEdit2.setText("");
-							mEdit3.setText("");
-							mEdit4.setText("");
-							mEdit5.setText("");
+							for (int i = 0; i < mEditList.size(); i++) {
+								mEditList.get(i).setText("");
+							}
+
 							Constants.addBitmap1 = null;
 							Constants.addBitmap2 = null;
 							Constants.addBitmap3 = null;
@@ -1442,6 +1437,7 @@ public class ExpandActivity extends FinalActivity {
 					}
 				});
 	}
+
 	public void getTitleList() {
 		mDialog.showProgressDlg(Constants.MESSAGE_PROGRESS);
 
@@ -1468,5 +1464,57 @@ public class ExpandActivity extends FinalActivity {
 
 			}
 		});
+	}
+
+	public void getField() {
+
+		mDialog.showProgressDlg(Constants.MESSAGE_PROGRESS);
+		RemoteUtils.getFieldListSJ(new WHTTHttpRequestCallBack() {
+
+			@Override
+			public void result(Object obj) {
+				// TODO Auto-generated method stub
+
+				mDialog.dismissProgressDlg();
+
+				FieldListEntity entity = (FieldListEntity) obj;
+
+				if (!entity.success) {
+					Toast.makeText(mContext, entity.msg, Toast.LENGTH_SHORT)
+							.show();
+
+				} else {
+					mEntity = entity;
+					initField();
+				}
+
+			}
+		});
+
+	}
+
+	private void initField() {
+
+		Log.e("mEntity.list.size() * 50 + 110",
+				(mEntity.list.size() * 50 + 110) + "");
+
+		mLayoutBg.setLayoutParams(new LinearLayout.LayoutParams(Constants.width
+				- DisplayUtil.dip2px(mContext, 20), DisplayUtil.dip2px(
+				mContext, mEntity.list.size() * 50 + 110)));
+		for (int i = 0; i < mEntity.list.size(); i++) {
+			LinearLayout view = (LinearLayout) LayoutInflater.from(mContext)
+					.inflate(R.layout.row_field_list, null);
+			TextView name = (TextView) view
+					.findViewById(R.id.row_field_txt_name);
+			EditText content = (EditText) view
+					.findViewById(R.id.row_field_edit_content);
+			name.setText(mEntity.list.get(i).title + ":");
+			content.setHint("请输入" + mEntity.list.get(i).title + "!");
+			mEditList.add(content);
+
+			mLayoutMain.addView(view);
+
+		}
+		mLayoutBg.setVisibility(View.VISIBLE);
 	}
 }

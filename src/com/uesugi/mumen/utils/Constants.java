@@ -2,6 +2,7 @@ package com.uesugi.mumen.utils;
 
 import android.graphics.Bitmap;
 
+import com.uesugi.mumen.MainActivity;
 import com.uesugi.mumen.entity.UploadEntity;
 import com.uesugi.mumen.entity.UserEntity;
 
@@ -14,11 +15,12 @@ public class Constants {
 			return false;
 		}
 	}
-	//========省份城市 全局变量========
+
+	// ========省份城市 全局变量========
 	public static String province = "1";
 	public static String city = "345";
 	public static String cityName = "朝阳区";
-	
+
 	public static String pwd;
 	public static String name;
 
@@ -28,13 +30,28 @@ public class Constants {
 	// public static UserCityEntity userCityEntity = null;
 
 	public static Bitmap testBitmap = null;
-	
+
 	public static Bitmap addBitmap1 = null;
 	public static Bitmap addBitmap2 = null;
 	public static Bitmap addBitmap3 = null;
 	public static Bitmap addBitmap4 = null;
 	public static Bitmap addBitmap5 = null;
 	public static UploadEntity uploadEntity = null;
+
+	public static Bitmap wyfxBitmap1 = null;
+	public static Bitmap wyfxBitmap2 = null;
+	public static Bitmap wyfxBitmap3 = null;
+	public static Bitmap wyfxBitmap4 = null;
+	public static Bitmap wyfxBitmap5 = null;
+	public static UploadEntity wyfxUploadEntity = null;
+
+	public static Bitmap dzysBitmap1 = null;
+	public static Bitmap dzysBitmap2 = null;
+	public static Bitmap dzysBitmap3 = null;
+	public static Bitmap dzysBitmap4 = null;
+	public static Bitmap dzysBitmap5 = null;
+	public static UploadEntity dzysUploadEntity = null;
+	
 	
 	public static final String APP_DEBUG = "0";
 	public static String TOKEN = "";
@@ -54,8 +71,7 @@ public class Constants {
 
 	// Sdcard相关变量
 	public final static String SDCARD_STORAGE_PATH = FileUtils.getSdCardPath();
-	public final static String APP_BASE_PATH = SDCARD_STORAGE_PATH
-			+ "MengTian";
+	public final static String APP_BASE_PATH = SDCARD_STORAGE_PATH + "MengTian";
 	public static String TEST_IMAGE = APP_BASE_PATH + "/pic_love_city.jpg";
 	// 图片缓存使用常量
 	public final static String IMAGE_CACHE_PATH = APP_BASE_PATH + "/imageCache";
@@ -133,7 +149,7 @@ public class Constants {
 
 	// public static MyMsgActivity mma = null;
 	// public static MyMsgInfoActivity mmia = null;
-	// public static MainActivity ma = null;
+	public static MainActivity mainActivity = null;
 	// public static MeActivity mea = null;
 	// public static String uid = null;
 
@@ -141,6 +157,6 @@ public class Constants {
 	public static String WD_PMSG = "0";
 	public static String WD_COMMENT = "0";
 
-//	public static MeActivity me = null;
+	// public static MeActivity me = null;
 
 }

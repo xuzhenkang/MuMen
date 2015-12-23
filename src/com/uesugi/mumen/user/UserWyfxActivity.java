@@ -1,10 +1,20 @@
 package com.uesugi.mumen.user;
 
+import java.io.File;
+import java.util.ArrayList;
+
+import lecho.lib.filechooser.FilechooserActivity;
+import lecho.lib.filechooser.ItemType;
+import lecho.lib.filechooser.SelectionMode;
 import net.tsz.afinal.FinalActivity;
 import net.tsz.afinal.annotation.view.ViewInject;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
@@ -18,6 +28,7 @@ import android.widget.Toast;
 
 import com.uesugi.mumen.R;
 import com.uesugi.mumen.entity.BaseEntity;
+import com.uesugi.mumen.entity.UploadEntity;
 import com.uesugi.mumen.utils.Constants;
 import com.uesugi.mumen.utils.DisplayUtil;
 import com.uesugi.mumen.utils.RemoteUtils;
@@ -86,6 +97,19 @@ public class UserWyfxActivity extends FinalActivity {
 	@ViewInject(id = R.id.wyfx_btn_ok, click = "btnOk")
 	private ImageButton mBtnOk;
 
+	@ViewInject(id = R.id.wyfx_imgv_photo, click = "btnPhoto")
+	private ImageView mImgVPhoto;
+	@ViewInject(id = R.id.wyfx_imgv_file, click = "btnFile")
+	private ImageView mImgVFile;
+	@ViewInject(id = R.id.wyfx_txt_file)
+	private TextView mTextFile;
+	@ViewInject(id = R.id.wyfx_layout_cancel, click = "btnFileCancel")
+	private RelativeLayout mLayoutFileCancel;
+
+	private String mPath = "";
+	private File mFile = null;
+	private String att_name = "";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -99,7 +123,34 @@ public class UserWyfxActivity extends FinalActivity {
 	}
 
 	public void btnLeft(View v) {
+		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(mEdit1.getWindowToken(), 0);
+		imm.hideSoftInputFromWindow(mEdit2.getWindowToken(), 0);
+		imm.hideSoftInputFromWindow(mEdit3.getWindowToken(), 0);
+		imm.hideSoftInputFromWindow(mEdit4.getWindowToken(), 0);
+		imm.hideSoftInputFromWindow(mEdit5.getWindowToken(), 0);
 		finish();
+	}
+
+	public void btnFile(View v) {
+		Intent i = new Intent(mContext, FilechooserActivity.class);
+		i.putExtra(FilechooserActivity.BUNDLE_ITEM_TYPE, ItemType.ALL);
+		i.putExtra(FilechooserActivity.BUNDLE_SELECTION_MODE,
+				SelectionMode.SINGLE_ITEM);
+		startActivityForResult(i, 1);
+	}
+
+	public void btnFileCancel(View v) {
+		mLayoutFileCancel.setVisibility(View.GONE);
+		mTextFile.setText("");
+		mFile = null;
+	}
+
+	public void btnPhoto(View v) {
+
+		Intent intent = new Intent();
+		intent.setClass(mContext, WyfxImgAddActivity.class);
+		startActivity(intent);
 	}
 
 	private void initView() {
@@ -158,8 +209,11 @@ public class UserWyfxActivity extends FinalActivity {
 		imm.hideSoftInputFromWindow(mEdit4.getWindowToken(), 0);
 		imm.hideSoftInputFromWindow(mEdit5.getWindowToken(), 0);
 		mDialog.showProgressDlg(Constants.MESSAGE_PROGRESS);
-
-		RemoteUtils.setWyfx(title, content, position, name, address,
+		if (Constants.wyfxUploadEntity == null) {
+			Constants.wyfxUploadEntity = new UploadEntity();
+		}
+		RemoteUtils.setWyfx(mFile, att_name, Constants.wyfxUploadEntity.imgs,
+				title, content, position, name, address,
 				new WHTTHttpRequestCallBack() {
 
 					@Override
@@ -177,6 +231,12 @@ public class UserWyfxActivity extends FinalActivity {
 						} else {
 							// UserPreferences.saveUserPref(mContext,
 							// entity.l_user);
+							Constants.wyfxBitmap1 = null;
+							Constants.wyfxBitmap2 = null;
+							Constants.wyfxBitmap3 = null;
+							Constants.wyfxBitmap4 = null;
+							Constants.wyfxBitmap5 = null;
+							Constants.wyfxUploadEntity = null;
 							Toast.makeText(mContext, "发布成功！",
 									Toast.LENGTH_SHORT).show();
 							finish();
@@ -185,5 +245,39 @@ public class UserWyfxActivity extends FinalActivity {
 
 					}
 				});
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if (resultCode == Activity.RESULT_OK) {
+			ArrayList<String> paths = data
+					.getStringArrayListExtra(FilechooserActivity.BUNDLE_SELECTED_PATHS);
+			StringBuilder sb = new StringBuilder();
+			for (String path : paths) {
+				sb.append(path);
+			}
+			ArrayList<String> names = data
+					.getStringArrayListExtra(FilechooserActivity.BUNDLE_SELECTED_NAMES);
+			StringBuilder namesb = new StringBuilder();
+			for (String name : names) {
+				namesb.append(name);
+			}
+
+			mFile = (File) data
+					.getSerializableExtra(FilechooserActivity.BUNDLE_SELECTED_FILES);
+
+			mPath = sb.toString();
+			att_name = namesb.toString();
+			mTextFile.setText(namesb.toString());
+			mLayoutFileCancel.setVisibility(View.VISIBLE);
+			if (mFile != null) {
+				Log.e("file", "file!=null");
+			} else {
+				Log.e("file", "file==null");
+			}
+
+		}
 	}
 }

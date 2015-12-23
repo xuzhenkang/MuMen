@@ -2,6 +2,9 @@ package com.uesugi.mumen.user;
 
 import java.io.File;
 
+import lecho.lib.filechooser.FilechooserActivity;
+import lecho.lib.filechooser.ItemType;
+import lecho.lib.filechooser.SelectionMode;
 import net.tsz.afinal.FinalActivity;
 import net.tsz.afinal.FinalBitmap;
 import net.tsz.afinal.annotation.view.ViewInject;
@@ -32,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.uesugi.mumen.CircleImageView;
+import com.uesugi.mumen.MuMenApplication;
 import com.uesugi.mumen.R;
 import com.uesugi.mumen.entity.LoginEntity;
 import com.uesugi.mumen.utils.Constants;
@@ -81,7 +85,8 @@ public class UserActivity extends FinalActivity {
 	private RelativeLayout mLayoutDz;
 	@ViewInject(id = R.id.user_layout_sj, click = "btnSj")
 	private RelativeLayout mLayoutSj;
-
+	@ViewInject(id = R.id.user_layout_exit, click = "btnExit")
+	private RelativeLayout mLayoutExit;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -93,6 +98,34 @@ public class UserActivity extends FinalActivity {
 		initUser();
 	}
 
+	public void btnExit(View v) {
+		AlertDialog.Builder alog = new Builder(this);
+		alog.setTitle("注销");
+		alog.setMessage("是否确定注销");
+		alog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+
+				dialog.dismiss();
+
+			}
+
+		});
+
+		alog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+
+				MuMenApplication.getInstance().logout();
+
+			}
+
+		});
+
+		alog.create().show();
+	}
 	public void btnRight(View v) {
 		finish();
 	}

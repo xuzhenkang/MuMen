@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">潘多拉</string>
+    <string name="app_name">梦天木门</string>
+
     <string name="hello_world">Hello world!</string>
+    <string name="fc_directory">[文件夹]</string>
+    <string name="fc_file">[文件]</string>
+    <string name="fc_type_directory">DIRECTORY</string>
+    <string name="fc_type_file">FILE</string>
+    <string name="fc_internal_storage">Internal Storage</string>
+    <string name="fc_external_storage">External Storage</string>
+    <string name="fc_read_only">(Read Only)</string>
+    <string name="fc_empty_directory">空文件夹</string>
+    <string name="fc_cancel">上一步</string>
+    <string name="fc_confirm">选择</string>
+    <string name="fc_close">关闭</string>
 
 </resources>

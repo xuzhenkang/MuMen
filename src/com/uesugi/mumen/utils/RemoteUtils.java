@@ -7,14 +7,17 @@ import java.util.List;
 import net.tsz.afinal.FinalHttp;
 import net.tsz.afinal.http.AjaxCallBack;
 import net.tsz.afinal.http.AjaxParams;
+import android.util.Log;
 
 import com.uesugi.mumen.entity.AreaListEntity;
 import com.uesugi.mumen.entity.ArticleListEntity;
 import com.uesugi.mumen.entity.BaseEntity;
+import com.uesugi.mumen.entity.FieldListEntity;
 import com.uesugi.mumen.entity.HyEntity;
 import com.uesugi.mumen.entity.LiveListEntity;
 import com.uesugi.mumen.entity.LoginEntity;
 import com.uesugi.mumen.entity.PicListEntity;
+import com.uesugi.mumen.entity.ShopDataListEntity;
 import com.uesugi.mumen.entity.TestEntity;
 import com.uesugi.mumen.entity.TitleListEntity;
 import com.uesugi.mumen.entity.TopListEntity;
@@ -22,10 +25,12 @@ import com.uesugi.mumen.entity.UploadEntity;
 import com.uesugi.mumen.json.AreaListJosnParser;
 import com.uesugi.mumen.json.ArticleListJosnParser;
 import com.uesugi.mumen.json.BaseJosnParser;
+import com.uesugi.mumen.json.FieldListJosnParser;
 import com.uesugi.mumen.json.HyJosnParser;
 import com.uesugi.mumen.json.LiveListJosnParser;
 import com.uesugi.mumen.json.LoginJosnParser;
 import com.uesugi.mumen.json.PicListJosnParser;
+import com.uesugi.mumen.json.ShopDataListJosnParser;
 import com.uesugi.mumen.json.TestJosnParser;
 import com.uesugi.mumen.json.TitleListJosnParser;
 import com.uesugi.mumen.json.TopListJosnParser;
@@ -289,7 +294,7 @@ public class RemoteUtils {
 	}
 
 	/**
-	 * 获取TOP week
+	 * 获取TOP PK
 	 */
 	public static void getPk(final WHTTHttpRequestCallBack callBack) {
 
@@ -339,10 +344,12 @@ public class RemoteUtils {
 	/**
 	 * 获取TOP week
 	 */
-	public static void getTopW(final WHTTHttpRequestCallBack callBack) {
+	public static void getTopW(String city_type,
+			final WHTTHttpRequestCallBack callBack) {
 
 		String url = Constants.URL_BASE + "/Api/Top/weeks?d="
-				+ Constants.APP_DEBUG + "&t=" + Constants.TOKEN;
+				+ Constants.APP_DEBUG + "&t=" + Constants.TOKEN + "&city_type="
+				+ city_type;
 
 		System.out.println(url);
 
@@ -387,10 +394,12 @@ public class RemoteUtils {
 	/**
 	 * 获取TOPmonth
 	 */
-	public static void getTopM(final WHTTHttpRequestCallBack callBack) {
+	public static void getTopM(String city_type,
+			final WHTTHttpRequestCallBack callBack) {
 
 		String url = Constants.URL_BASE + "/Api/Top/month?d="
-				+ Constants.APP_DEBUG + "&t=" + Constants.TOKEN;
+				+ Constants.APP_DEBUG + "&t=" + Constants.TOKEN + "&city_type="
+				+ city_type;
 
 		System.out.println(url);
 
@@ -435,10 +444,12 @@ public class RemoteUtils {
 	/**
 	 * 获取TOPquarter
 	 */
-	public static void getTopQ(final WHTTHttpRequestCallBack callBack) {
+	public static void getTopQ(String city_type,
+			final WHTTHttpRequestCallBack callBack) {
 
 		String url = Constants.URL_BASE + "/Api/Top/quarter?d="
-				+ Constants.APP_DEBUG + "&t=" + Constants.TOKEN;
+				+ Constants.APP_DEBUG + "&t=" + Constants.TOKEN + "&city_type="
+				+ city_type;
 
 		System.out.println(url);
 
@@ -483,10 +494,12 @@ public class RemoteUtils {
 	/**
 	 * 获取TOPyears
 	 */
-	public static void getTopY(final WHTTHttpRequestCallBack callBack) {
+	public static void getTopY(String city_type,
+			final WHTTHttpRequestCallBack callBack) {
 
 		String url = Constants.URL_BASE + "/Api/Top/years?d="
-				+ Constants.APP_DEBUG + "&t=" + Constants.TOKEN;
+				+ Constants.APP_DEBUG + "&t=" + Constants.TOKEN + "&city_type="
+				+ city_type;
 
 		System.out.println(url);
 
@@ -916,12 +929,203 @@ public class RemoteUtils {
 	}
 
 	/**
+	 * 获取店装汇报的Field
+	 */
+	public static void getFieldListDZ(final WHTTHttpRequestCallBack callBack) {
+
+		String url = Constants.URL_BASE + "/User/Personal/get_assep_field?d="
+				+ Constants.APP_DEBUG + "&t=" + Constants.TOKEN;
+
+		System.out.println(url);
+
+		final FinalHttp httpRequest = new FinalHttp();
+		httpRequest.get(url, new AjaxCallBack<Object>() {
+
+			@Override
+			public void onFailure(Throwable t, int errorNo, String strMsg) {
+				// TODO Auto-generated method stub
+				super.onFailure(t, errorNo, strMsg);
+
+				FieldListEntity entity = new FieldListEntity();
+				entity.error();
+				callBack.result(entity);
+
+			}
+
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+				super.onStart();
+			}
+
+			@Override
+			public void onSuccess(Object t) {
+				// TODO Auto-generated method stub
+				super.onSuccess(t);
+
+				System.out.println("t:" + t);
+
+				FieldListJosnParser json = new FieldListJosnParser();
+				json.setJson(t.toString());
+				FieldListEntity entity = json.parser();
+				callBack.result(entity);
+
+			}
+
+		});
+
+	}
+
+	/**
+	 * 获取我要升级Field
+	 */
+	public static void getFieldListSJ(final WHTTHttpRequestCallBack callBack) {
+
+		String url = Constants.URL_BASE + "/Api/Upgrade/get_field?d="
+				+ Constants.APP_DEBUG + "&t=" + Constants.TOKEN;
+
+		System.out.println(url);
+
+		final FinalHttp httpRequest = new FinalHttp();
+		httpRequest.get(url, new AjaxCallBack<Object>() {
+
+			@Override
+			public void onFailure(Throwable t, int errorNo, String strMsg) {
+				// TODO Auto-generated method stub
+				super.onFailure(t, errorNo, strMsg);
+
+				FieldListEntity entity = new FieldListEntity();
+				entity.error();
+				callBack.result(entity);
+
+			}
+
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+				super.onStart();
+			}
+
+			@Override
+			public void onSuccess(Object t) {
+				// TODO Auto-generated method stub
+				super.onSuccess(t);
+
+				System.out.println("t:" + t);
+
+				FieldListJosnParser json = new FieldListJosnParser();
+				json.setJson(t.toString());
+				FieldListEntity entity = json.parser();
+				callBack.result(entity);
+
+			}
+
+		});
+
+	}
+
+	/**
+	 * 获取销售汇报Field
+	 */
+	public static void getFieldListHB(final WHTTHttpRequestCallBack callBack) {
+
+		String url = Constants.URL_BASE + "/User/Personal/get_report_field?d="
+				+ Constants.APP_DEBUG + "&t=" + Constants.TOKEN;
+
+		System.out.println(url);
+
+		final FinalHttp httpRequest = new FinalHttp();
+		httpRequest.get(url, new AjaxCallBack<Object>() {
+
+			@Override
+			public void onFailure(Throwable t, int errorNo, String strMsg) {
+				// TODO Auto-generated method stub
+				super.onFailure(t, errorNo, strMsg);
+
+				FieldListEntity entity = new FieldListEntity();
+				entity.error();
+				callBack.result(entity);
+
+			}
+
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+				super.onStart();
+			}
+
+			@Override
+			public void onSuccess(Object t) {
+				// TODO Auto-generated method stub
+				super.onSuccess(t);
+
+				System.out.println("t:" + t);
+
+				FieldListJosnParser json = new FieldListJosnParser();
+				json.setJson(t.toString());
+				FieldListEntity entity = json.parser();
+				callBack.result(entity);
+
+			}
+
+		});
+
+	}
+
+	/**
+	 * 获取销售汇报数据
+	 */
+	public static void getShopDataList(final WHTTHttpRequestCallBack callBack) {
+
+		String url = Constants.URL_BASE + "/User/Personal/is_report?d="
+				+ Constants.APP_DEBUG + "&t=" + Constants.TOKEN;
+
+		System.out.println(url);
+
+		final FinalHttp httpRequest = new FinalHttp();
+		httpRequest.get(url, new AjaxCallBack<Object>() {
+
+			@Override
+			public void onFailure(Throwable t, int errorNo, String strMsg) {
+				// TODO Auto-generated method stub
+				super.onFailure(t, errorNo, strMsg);
+
+				ShopDataListEntity entity = new ShopDataListEntity();
+				entity.error();
+				callBack.result(entity);
+
+			}
+
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+				super.onStart();
+			}
+
+			@Override
+			public void onSuccess(Object t) {
+				// TODO Auto-generated method stub
+				super.onSuccess(t);
+
+				System.out.println("t:" + t);
+
+				ShopDataListJosnParser json = new ShopDataListJosnParser();
+				json.setJson(t.toString());
+				ShopDataListEntity entity = json.parser();
+				callBack.result(entity);
+
+			}
+
+		});
+
+	}
+
+	/**
 	 * 提交我要升级
 	 */
 
-	public static void upDateAdd(String name, String address, String area,
-			String remark, String phone, List<String> imgs,
-			final WHTTHttpRequestCallBack callBack) {
+	public static void upDateAdd(List<String> content, List<String> name,
+			List<String> imgs, final WHTTHttpRequestCallBack callBack) {
 
 		String url = Constants.URL_BASE + "/Api/Upgrade/add?d="
 				+ Constants.APP_DEBUG;
@@ -936,11 +1140,13 @@ public class RemoteUtils {
 				}
 			}
 		}
-		params.put("name", name);
-		params.put("address", address);
-		params.put("area", area);
-		params.put("remark", remark);
-		params.put("phone", phone);
+		if (content != null && name != null && content.size() == name.size()) {
+			for (int i = 0; i < content.size(); i++) {
+
+				params.put(name.get(i), content.get(i));
+
+			}
+		}
 
 		params.put("t", Constants.TOKEN);
 		FinalHttp fh = new FinalHttp();
@@ -1018,11 +1224,11 @@ public class RemoteUtils {
 	}
 
 	/**
-	 * 提交我要升级
+	 * 提交销售汇报
 	 */
 
-	public static void setXshb(String jdkh, String yxkh, String cjkh,
-			String fhb, String proceeds, final WHTTHttpRequestCallBack callBack) {
+	public static void setXshb(List<String> content, List<String> name,
+			final WHTTHttpRequestCallBack callBack) {
 
 		String url = Constants.URL_BASE + "/User/Personal/report?d="
 				+ Constants.APP_DEBUG;
@@ -1030,11 +1236,13 @@ public class RemoteUtils {
 		System.out.println(url);
 
 		AjaxParams params = new AjaxParams();
-		params.put("jdkh", jdkh);
-		params.put("yxkh", yxkh);
-		params.put("cjkh", cjkh);
-		params.put("fhb", fhb);
-		params.put("proceeds", proceeds);
+		if (content != null && name != null && content.size() == name.size()) {
+			for (int i = 0; i < content.size(); i++) {
+
+				params.put(name.get(i), content.get(i));
+
+			}
+		}
 
 		params.put("t", Constants.TOKEN);
 		FinalHttp fh = new FinalHttp();
@@ -1071,8 +1279,9 @@ public class RemoteUtils {
 	 * 发布我要分享
 	 */
 
-	public static void setWyfx(String title, String content, String position,
-			String name, String address, final WHTTHttpRequestCallBack callBack) {
+	public static void setWyfx(File att, String att_name, List<String> imgs,
+			String title, String content, String position, String name,
+			String address, final WHTTHttpRequestCallBack callBack) {
 
 		String url = Constants.URL_BASE + "/User/Personal/share?d="
 				+ Constants.APP_DEBUG;
@@ -1080,6 +1289,24 @@ public class RemoteUtils {
 		System.out.println(url);
 
 		AjaxParams params = new AjaxParams();
+		if (att != null) {
+			try {
+				params.put("att", att);
+				params.put("att_name", att_name);
+				Log.e("setWyfx", "att!=null");
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				Log.e("setWyfx", "att==null");
+			}
+		}
+		if (imgs != null) {
+			for (int i = 0; i < imgs.size(); i++) {
+				if (!StringUtils.isBlank(imgs.get(i))) {
+					params.put("imgs[" + i + "]", imgs.get(i));
+				}
+			}
+		}
 		params.put("title", title);
 		params.put("content", content);
 		params.put("position", position);
@@ -1118,11 +1345,11 @@ public class RemoteUtils {
 	}
 
 	/**
-	 * 提交我要升级
+	 * 提交店装验收
 	 */
 
-	public static void setDzys(String content, List<String> imgs,
-			final WHTTHttpRequestCallBack callBack) {
+	public static void setDzys(List<String> content, List<String> name,
+			List<String> imgs, final WHTTHttpRequestCallBack callBack) {
 
 		String url = Constants.URL_BASE + "/User/Personal/acceptance?d="
 				+ Constants.APP_DEBUG;
@@ -1137,7 +1364,13 @@ public class RemoteUtils {
 				}
 			}
 		}
-		params.put("content", content);
+		if (content != null && name != null && content.size() == name.size()) {
+			for (int i = 0; i < content.size(); i++) {
+
+				params.put(name.get(i), content.get(i));
+
+			}
+		}
 
 		params.put("t", Constants.TOKEN);
 		FinalHttp fh = new FinalHttp();

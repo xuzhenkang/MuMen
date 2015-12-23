@@ -215,8 +215,8 @@ public class PromotionActivity extends FinalActivity {
 		
 		LeCloud.init(getApplicationContext());
 		initView();
-
-		checkLogin();
+		getTitleList();
+//		checkLogin();
 
 	}
 
@@ -1174,7 +1174,7 @@ public class PromotionActivity extends FinalActivity {
 		if (requestCode == Constants.REQUEST_USER_LOGIN) {
 
 			if (resultCode == RESULT_CANCELED) {
-				finish();
+				System.exit(0);
 			} else if (resultCode == RESULT_OK) {
 
 				getTitleList();

@@ -49,8 +49,9 @@
         android:name="com.uesugi.mumen.MuMenApplication"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
-        android:icon="@drawable/logo140"
+        android:icon="@drawable/logo200"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.uesugi.mumen.SplashActivity"
@@ -61,6 +62,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+                <activity
+            android:name="lecho.lib.filechooser.FilechooserActivity"
+            android:label="@string/app_name" >
         </activity>
         <activity
             android:name="com.uesugi.mumen.MainActivity"
@@ -108,10 +113,23 @@
             android:name="com.uesugi.mumen.user.LoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" >
+            
+            android:windowSoftInputMode="stateHidden|adjustResize" >
         </activity>
         <activity
             android:name="com.uesugi.mumen.user.ImgAddActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+                <activity
+            android:name="com.uesugi.mumen.user.WyfxImgAddActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+                        <activity
+            android:name="com.uesugi.mumen.user.DzysImgAddActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" >
@@ -120,7 +138,7 @@
             android:name="com.uesugi.mumen.user.UserXshbActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustResize" >
         </activity>
         <activity
             android:name="com.uesugi.mumen.user.IconActivity"
@@ -132,7 +150,7 @@
             android:name="com.uesugi.mumen.user.UserWyfxActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustResize" >
         </activity>
         <activity
             android:name="com.uesugi.mumen.user.ShopActivity"
@@ -150,7 +168,7 @@
             android:name="com.uesugi.mumen.user.UserDzysActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustResize" >
         </activity>
         <activity
             android:name="com.uesugi.mumen.user.HyActivity"
@@ -162,7 +180,7 @@
             android:name="com.uesugi.mumen.expand.ExpandActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustResize" >
         </activity>
         <activity
             android:name="com.uesugi.mumen.top.TopActivity"

@@ -25,6 +25,7 @@ import cn.sharesdk.framework.Platform;
 import com.mob.tools.FakeActivity;
 import com.mob.tools.utils.BitmapHelper;
 
+
 public class EditPageFakeActivity extends FakeActivity {
 
 	protected List<Platform> platforms;
@@ -231,6 +232,7 @@ public class EditPageFakeActivity extends FakeActivity {
 					param.put("address", toFriendList.get(toFriendList.size() - 1));
 				}
 				if(param.get("address") == null) {
+
 					int resId = getStringRes(activity, "select_a_friend");
 					if (resId > 0) {
 						Toast.makeText(getContext(), activity.getString(resId) + " - " + platform.getName(), Toast.LENGTH_SHORT).show();
