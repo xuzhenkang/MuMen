@@ -118,7 +118,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="10dip"
-                    android:text="开发：雪夜营销策划机构  版权：浙江梦天木业集团"
+                    android:text="开发：雪野营销策划机构  版权：浙江梦天木业集团"
                     android:textColor="#adadad"
                     android:textSize="12sp" />
             </RelativeLayout>
