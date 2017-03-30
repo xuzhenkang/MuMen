@@ -364,22 +364,27 @@ public class ImgAddActivity extends FinalActivity {
 				Constants.addBitmap1 = null;
 				Constants.addBitmap1 = setImage(data.getData());
 				mImgV1.setImageBitmap(Constants.addBitmap1);
+				mImgV2.setVisibility(View.VISIBLE);
 			} else if (mImgIndex.equals("2")) {
 				Constants.addBitmap2 = null;
 				Constants.addBitmap2 = setImage(data.getData());
+				mImgV3.setVisibility(View.VISIBLE);
 				mImgV2.setImageBitmap(Constants.addBitmap2);
 			} else if (mImgIndex.equals("3")) {
 				Constants.addBitmap3 = null;
 				Constants.addBitmap3 = setImage(data.getData());
 				mImgV3.setImageBitmap(Constants.addBitmap3);
+				mImgV4.setVisibility(View.VISIBLE);
 			} else if (mImgIndex.equals("4")) {
 				Constants.addBitmap4 = null;
 				Constants.addBitmap4 = setImage(data.getData());
-				mImgV3.setImageBitmap(Constants.addBitmap4);
+				mImgV4.setImageBitmap(Constants.addBitmap4);
+				mImgV5.setVisibility(View.VISIBLE);
 			} else if (mImgIndex.equals("5")) {
 				Constants.addBitmap5 = null;
 				Constants.addBitmap5 = setImage(data.getData());
 				mImgV5.setImageBitmap(Constants.addBitmap5);
+				
 			}
 		}
 	}

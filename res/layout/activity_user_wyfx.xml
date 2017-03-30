@@ -41,11 +41,21 @@
                         android:background="@drawable/img_share_picture" />
                 </LinearLayout>
             </RelativeLayout>
-
+            <TextView
+                android:id="@+id/wyfx_txt_jj"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:minHeight="0dip"
+                android:layout_marginTop="10dip"
+                android:background="@drawable/bg_xshb_jj"
+                android:visibility="gone" />
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="520dip"
                 android:layout_marginLeft="10dip"
+                android:layout_marginBottom="10dip"
                 android:layout_marginRight="10dip"
                 android:layout_marginTop="10dip" >
 
@@ -328,6 +338,15 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="10dip"
                         android:background="@drawable/btn_fabu" />
+
+                    <TextView
+                        android:id="@+id/wyfx_txt_email"
+                        android:layout_width="fill_parent"
+                        android:layout_height="40dip"
+                        android:gravity="center"
+                        android:text=""
+                        android:textColor="#3d4458"
+                        android:textSize="12sp" />
                 </LinearLayout>
             </RelativeLayout>
         </LinearLayout>

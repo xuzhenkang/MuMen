@@ -9,6 +9,7 @@ import android.util.DisplayMetrics;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import cn.jpush.android.api.JPushInterface;
 
 import com.uesugi.mumen.user.LoginActivity;
 import com.uesugi.mumen.utils.Constants;
@@ -56,18 +57,18 @@ public class SplashActivity extends Activity {
 		}, 2000); // 2秒，够用了吧
 	}
 
-	// @Override
-	// protected void onResume() {
-	// super.onResume();
-	// JPushInterface.onResume(mContext);
-	// }
-	//
-	// @Override
-	// protected void onPause() {
-	// // TODO Auto-generated method stub
-	// super.onPause();
-	// JPushInterface.onPause(mContext);
-	// }
+	 @Override
+	 protected void onResume() {
+	 super.onResume();
+	 JPushInterface.onResume(mContext);
+	 }
+	
+	 @Override
+	 protected void onPause() {
+	 // TODO Auto-generated method stub
+	 super.onPause();
+	 JPushInterface.onPause(mContext);
+	 }
 
 	private void checkLogin() {
 		Intent i = new Intent();

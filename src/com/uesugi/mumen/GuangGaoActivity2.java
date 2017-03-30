@@ -13,17 +13,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebChromeClient.CustomViewCallback;
-import android.webkit.WebSettings;
-import android.webkit.WebSettings.PluginState;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.uesugi.mumen.utils.RemoteUtils;
 import com.uesugi.mumen.utils.ShowAlertDialog;
-import com.uesugi.mumen.utils.WHTTHttpRequestCallBack;
 
 public class GuangGaoActivity2 extends Activity {
 	private final static String TAG = "GuangGaoActivity";

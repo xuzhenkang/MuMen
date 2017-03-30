@@ -6,10 +6,7 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-import cn.sharesdk.framework.authorize.e;
-
 import com.uesugi.mumen.entity.HyEntity;
-import com.uesugi.mumen.entity.UserEntity;
 
 public class HyJosnParser {
 

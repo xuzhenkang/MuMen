@@ -55,11 +55,11 @@ import cn.sharesdk.framework.CustomPlatform;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.framework.TitleLayout;
-
-import com.mob.tools.utils.UIHandler;
 import cn.sharesdk.onekeyshare.EditPageFakeActivity;
 import cn.sharesdk.onekeyshare.PicViewer;
 import cn.sharesdk.onekeyshare.ShareCore;
+
+import com.mob.tools.utils.UIHandler;
 
 /**
  * Photo-text Sharing will be handling in this page

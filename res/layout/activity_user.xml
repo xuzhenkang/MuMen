@@ -64,7 +64,7 @@
             android:layout_marginLeft="40dip"
             android:text="头像"
             android:textColor="#757575"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
         <ImageView
             android:layout_width="9dip"
@@ -107,7 +107,7 @@
             android:layout_marginLeft="40dip"
             android:text="销售汇报"
             android:textColor="#757575"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
         <ImageView
             android:layout_width="9dip"
@@ -145,7 +145,7 @@
             android:layout_marginLeft="40dip"
             android:text="我要分享"
             android:textColor="#757575"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
         <ImageView
             android:layout_width="9dip"
@@ -183,7 +183,7 @@
             android:layout_marginLeft="40dip"
             android:text="店装验收汇报"
             android:textColor="#757575"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
         <ImageView
             android:layout_width="9dip"
@@ -197,6 +197,7 @@
             android:layout_width="fill_parent"
             android:layout_height="1px"
             android:layout_alignParentBottom="true"
+            android:layout_marginLeft="10dip"
             android:background="#dfdfdf" />
     </RelativeLayout>
 
@@ -226,7 +227,7 @@
             android:layout_marginLeft="40dip"
             android:text="运营动态"
             android:textColor="#757575"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
         <ImageView
             android:layout_width="9dip"
@@ -243,20 +244,63 @@
             android:background="#dfdfdf" />
     </RelativeLayout>
 
-    
-       <RelativeLayout
+    <RelativeLayout
+        android:id="@+id/user_layout_msg"
+        android:layout_width="fill_parent"
+        android:layout_height="40dip"
+        android:background="@drawable/mm_white2default" >
+
+        <ImageView
+            android:layout_width="17dip"
+            android:layout_height="17dip"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dip"
+            android:background="@drawable/icon_system_messages" />
+
+        <ImageView
+            android:id="@+id/user_imgv_msgdian"
+            android:layout_width="5dip"
+            android:layout_height="5dip"
+            android:layout_marginLeft="27dip"
+            android:layout_marginTop="5dip"
+            android:background="@drawable/bg_msg_dot"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="40dip"
+            android:text="消息通知"
+            android:textColor="#757575"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:layout_width="9dip"
+            android:layout_height="14dip"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dip"
+            android:background="@drawable/icon_more" />
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:background="#dfdfdf" />
+    </RelativeLayout>
+
+    <RelativeLayout
         android:id="@+id/user_layout_exit"
         android:layout_width="fill_parent"
         android:layout_height="40dip"
-        android:layout_marginTop="50dip"
+        android:layout_marginTop="30dip"
         android:background="@drawable/mm_white2default" >
 
         <ImageView
             android:layout_width="fill_parent"
             android:layout_height="1px"
             android:background="#dfdfdf" />
-
-
 
         <TextView
             android:layout_width="wrap_content"
@@ -267,13 +311,11 @@
             android:textColor="#757575"
             android:textSize="14sp" />
 
-
-
         <ImageView
             android:layout_width="fill_parent"
             android:layout_height="1px"
             android:layout_alignParentBottom="true"
             android:background="#dfdfdf" />
     </RelativeLayout>
-    
+
 </LinearLayout>

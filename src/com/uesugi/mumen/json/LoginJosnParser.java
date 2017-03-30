@@ -54,11 +54,13 @@ public class LoginJosnParser {
 					entity.l_user.store_id = itemOjbect.getString("store_id");
 					entity.l_user.store_name = itemOjbect.getString("store_name");
 					entity.l_user.store_icon = itemOjbect.getString("store_icon");
-					
+					entity.l_user.factory_email = itemOjbect.getString("factory_email");
 					entity.l_user.factory_id = itemOjbect.getString("factory_id");
 					entity.l_user.factory_name = itemOjbect.getString("factory_name");
 					entity.l_user.factory_icon = itemOjbect.getString("factory_icon");
-					
+					entity.l_user.report_content = itemOjbect.getString("report_content");
+					entity.l_user.share_content = itemOjbect.getString("share_content");
+					entity.l_user.assep_content = itemOjbect.getString("assep_content");
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					// e.printStackTrace();

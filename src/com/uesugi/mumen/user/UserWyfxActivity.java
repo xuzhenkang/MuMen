@@ -7,13 +7,16 @@ import lecho.lib.filechooser.FilechooserActivity;
 import lecho.lib.filechooser.ItemType;
 import lecho.lib.filechooser.SelectionMode;
 import net.tsz.afinal.FinalActivity;
+import net.tsz.afinal.FinalBitmap;
 import net.tsz.afinal.annotation.view.ViewInject;
+import net.tsz.afinal.bitmap.core.BitmapDisplayConfig;
+import net.tsz.afinal.bitmap.display.Displayer;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -78,7 +81,8 @@ public class UserWyfxActivity extends FinalActivity {
 	private TextView mTextTopTitle;
 
 	private ShowAlertDialog mDialog = null;
-
+	@ViewInject(id = R.id.wyfx_txt_jj)
+	private TextView mTextJJ;
 	@ViewInject(id = R.id.header_imgv_bg)
 	private ImageView mImgVHBG;
 	@ViewInject(id = R.id.header_imgv_icon)
@@ -105,7 +109,8 @@ public class UserWyfxActivity extends FinalActivity {
 	private TextView mTextFile;
 	@ViewInject(id = R.id.wyfx_layout_cancel, click = "btnFileCancel")
 	private RelativeLayout mLayoutFileCancel;
-
+	@ViewInject(id = R.id.wyfx_txt_email)
+	private TextView mTextEMail;
 	private String mPath = "";
 	private File mFile = null;
 	private String att_name = "";
@@ -163,13 +168,45 @@ public class UserWyfxActivity extends FinalActivity {
 						- DisplayUtil.dip2px(mContext, 20),
 						(int) ((Constants.width - DisplayUtil.dip2px(mContext,
 								20)) * 0.39f)));
+		FinalBitmap mFinalBitmap = FinalBitmap.create(mContext);
+		mFinalBitmap.configDisplayer(new Displayer() {
 
+			@Override
+			public void loadFailDisplay(View arg0, Bitmap arg1) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void loadCompletedisplay(View arg0, Bitmap arg1,
+					BitmapDisplayConfig arg2) {
+				// TODO Auto-generated method stub
+				ImageView x = (ImageView) arg0;
+				x.setImageBitmap(arg1);
+				// if(arg0.getId()==R.id.more_imgv_icon){
+				//
+				// }
+			}
+		});
+		mFinalBitmap.display(mImgVHIcon,
+				"http://115.28.137.139:89/Api/Public/get_pic_share?id="
+						+ Constants.entityUser.factory_id);
 		mTopBtnLeft.setVisibility(View.VISIBLE);
 		mDialog = new ShowAlertDialog(mContext);
 
 		mTextTopTitle.setText("我要分享");
-
+		if (!StringUtils.isBlank(Constants.entityUser.share_content)) {
+			mTextJJ.setVisibility(View.VISIBLE);
+			mTextJJ.setText(Constants.entityUser.share_content);
+		}
 		Resources res = mContext.getResources();
+
+		if (!StringUtils.isBlank(Constants.entityUser.factory_email)) {
+			mTextEMail.setText("也可将分享发送至:" + Constants.entityUser.factory_email
+					+ "邮箱");
+		} else {
+			mTextEMail.setText("");
+		}
 
 	}
 

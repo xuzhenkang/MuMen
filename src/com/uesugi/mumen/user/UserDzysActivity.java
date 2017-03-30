@@ -1,10 +1,5 @@
 package com.uesugi.mumen.user;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,25 +8,17 @@ import net.tsz.afinal.FinalBitmap;
 import net.tsz.afinal.annotation.view.ViewInject;
 import net.tsz.afinal.bitmap.core.BitmapDisplayConfig;
 import net.tsz.afinal.bitmap.display.Displayer;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.ContentResolver;
+import android.R.integer;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
-import android.media.ExifInterface;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -42,13 +29,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.uesugi.mumen.GuangGaoActivity;
 import com.uesugi.mumen.R;
 import com.uesugi.mumen.entity.BaseEntity;
 import com.uesugi.mumen.entity.FieldListEntity;
 import com.uesugi.mumen.entity.UploadEntity;
 import com.uesugi.mumen.utils.Constants;
 import com.uesugi.mumen.utils.DisplayUtil;
-import com.uesugi.mumen.utils.FileUtils;
 import com.uesugi.mumen.utils.RemoteUtils;
 import com.uesugi.mumen.utils.ShowAlertDialog;
 import com.uesugi.mumen.utils.StringUtils;
@@ -92,6 +79,8 @@ public class UserDzysActivity extends FinalActivity {
 	private Context mContext = null;
 	@ViewInject(id = R.id.top_view_btn_left, click = "btnLeft")
 	private ImageButton mTopBtnLeft;
+	// @ViewInject(id = R.id.top_view_textbtn_right, click = "btnRight")
+	// private Button mTopBtnRight;
 	@ViewInject(id = R.id.top_view_title)
 	private TextView mTextTopTitle;
 
@@ -117,6 +106,10 @@ public class UserDzysActivity extends FinalActivity {
 	@ViewInject(id = R.id.dzys_imgv_photo, click = "btnPhoto")
 	private ImageView mImgVPhoto;
 	private List<EditText> mEditList = new ArrayList<EditText>();
+	private List<ImageView> mBgList = new ArrayList<ImageView>();
+	private List<TextView> mTextList = new ArrayList<TextView>();
+	@ViewInject(id = R.id.dzys_txt_jj)
+	private TextView mTextJJ;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -175,27 +168,65 @@ public class UserDzysActivity extends FinalActivity {
 
 	private void initField() {
 
-		
 		Log.e("mEntity.list.size() * 50 + 110",
 				(mEntity.list.size() * 50 + 110) + "");
 
 		mLayoutBg.setLayoutParams(new LinearLayout.LayoutParams(Constants.width
 				- DisplayUtil.dip2px(mContext, 20), DisplayUtil.dip2px(
-				mContext, mEntity.list.size() * 50 + 110)));
+				mContext, mEntity.list.size() * 50 + 120)));
 		for (int i = 0; i < mEntity.list.size(); i++) {
 			LinearLayout view = (LinearLayout) LayoutInflater.from(mContext)
 					.inflate(R.layout.row_field_list, null);
 			TextView name = (TextView) view
 					.findViewById(R.id.row_field_txt_name);
+			ImageView bg = (ImageView) view
+					.findViewById(R.id.row_field_iv_content_bg);
 			EditText content = (EditText) view
 					.findViewById(R.id.row_field_edit_content);
 			name.setText(mEntity.list.get(i).title + ":");
+			mTextList.add(name);
+			mBgList.add(bg);
 			content.setHint("请输入" + mEntity.list.get(i).title + "!");
+
 			mEditList.add(content);
 
 			mLayoutMain.addView(view);
 
 		}
+		
+		if (mEntity.list.size()>0) {
+			int x=0;
+			int p=0;
+			for (int i = 0; i < mEntity.list.size(); i++) {
+				if (mEntity.list.get(i).title.length()>x) {
+					p=i;
+					x=mEntity.list.get(i).title.length();
+				}
+			}
+			final TextView xTextView = mTextList.get(p);
+			ViewTreeObserver mViewTreeObserver = xTextView.getViewTreeObserver();
+			mViewTreeObserver
+					.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+						@Override
+						public void onGlobalLayout() {
+							// TODO Auto-generated method stub
+							xTextView.getViewTreeObserver()
+									.removeGlobalOnLayoutListener(this);
+							int w = Constants.width
+									- DisplayUtil.dip2px(mContext, 70)
+									- xTextView.getWidth();
+							for (int i = 0; i < mEditList.size(); i++) {
+								mEditList.get(i).getLayoutParams().width = w;
+								mEditList.get(i).requestLayout();
+								mBgList.get(i).getLayoutParams().width = w;
+								mBgList.get(i).requestLayout();
+							}
+
+						}
+					});
+
+		}
+		
 		mLayoutBg.setVisibility(View.VISIBLE);
 	}
 
@@ -264,6 +295,16 @@ public class UserDzysActivity extends FinalActivity {
 
 	}
 
+	public void btnRight(View v) {
+		Intent intent = new Intent();
+		intent.setClass(mContext, GuangGaoActivity.class);
+		intent.putExtra("title", "汇报说明");
+		intent.putExtra("url",
+				"http://115.28.137.139:89/Api/Public/get_html_accep?id="
+						+ Constants.entityUser.factory_id);
+		startActivity(intent);
+	}
+
 	private void initView() {
 		mImgVHBG.setLayoutParams(new RelativeLayout.LayoutParams(
 				Constants.width, (int) ((Constants.width - DisplayUtil.dip2px(
@@ -274,10 +315,40 @@ public class UserDzysActivity extends FinalActivity {
 						- DisplayUtil.dip2px(mContext, 20),
 						(int) ((Constants.width - DisplayUtil.dip2px(mContext,
 								20)) * 0.39f)));
+		FinalBitmap mFinalBitmap = FinalBitmap.create(mContext);
+		mFinalBitmap.configDisplayer(new Displayer() {
+
+			@Override
+			public void loadFailDisplay(View arg0, Bitmap arg1) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void loadCompletedisplay(View arg0, Bitmap arg1,
+					BitmapDisplayConfig arg2) {
+				// TODO Auto-generated method stub
+				ImageView x = (ImageView) arg0;
+				x.setImageBitmap(arg1);
+				// if(arg0.getId()==R.id.more_imgv_icon){
+				//
+				// }
+			}
+		});
+		mFinalBitmap.display(mImgVHIcon,
+				"http://115.28.137.139:89/Api/Public/get_pic_accep?id="
+						+ Constants.entityUser.factory_id);
 		mTopBtnLeft.setVisibility(View.VISIBLE);
+		// mTopBtnRight.setVisibility(View.VISIBLE);
+		// mTopBtnRight.setText("汇报说明");
 		mDialog = new ShowAlertDialog(mContext);
 
 		mTextTopTitle.setText("店装验收");
+
+		if (!StringUtils.isBlank(Constants.entityUser.assep_content)) {
+			mTextJJ.setVisibility(View.VISIBLE);
+			mTextJJ.setText(Constants.entityUser.assep_content);
+		}
 
 		mFinalBitmap = FinalBitmap.create(mContext);
 		mFinalBitmap.configDisplayer(new Displayer() {

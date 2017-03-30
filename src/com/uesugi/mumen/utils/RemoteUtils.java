@@ -12,10 +12,13 @@ import android.util.Log;
 import com.uesugi.mumen.entity.AreaListEntity;
 import com.uesugi.mumen.entity.ArticleListEntity;
 import com.uesugi.mumen.entity.BaseEntity;
+import com.uesugi.mumen.entity.CustomListEntity;
+import com.uesugi.mumen.entity.DianEntity;
 import com.uesugi.mumen.entity.FieldListEntity;
 import com.uesugi.mumen.entity.HyEntity;
 import com.uesugi.mumen.entity.LiveListEntity;
 import com.uesugi.mumen.entity.LoginEntity;
+import com.uesugi.mumen.entity.MsgDianListEntity;
 import com.uesugi.mumen.entity.PicListEntity;
 import com.uesugi.mumen.entity.ShopDataListEntity;
 import com.uesugi.mumen.entity.TestEntity;
@@ -25,10 +28,14 @@ import com.uesugi.mumen.entity.UploadEntity;
 import com.uesugi.mumen.json.AreaListJosnParser;
 import com.uesugi.mumen.json.ArticleListJosnParser;
 import com.uesugi.mumen.json.BaseJosnParser;
+import com.uesugi.mumen.json.ColumnTitleListJosnParser;
+import com.uesugi.mumen.json.CustomListJosnParser;
+import com.uesugi.mumen.json.DianJosnParser;
 import com.uesugi.mumen.json.FieldListJosnParser;
 import com.uesugi.mumen.json.HyJosnParser;
 import com.uesugi.mumen.json.LiveListJosnParser;
 import com.uesugi.mumen.json.LoginJosnParser;
+import com.uesugi.mumen.json.MsgDianListJosnParser;
 import com.uesugi.mumen.json.PicListJosnParser;
 import com.uesugi.mumen.json.ShopDataListJosnParser;
 import com.uesugi.mumen.json.TestJosnParser;
@@ -100,6 +107,56 @@ public class RemoteUtils {
 			final WHTTHttpRequestCallBack callBack) {
 
 		String url = Constants.URL_BASE + "/Api/Article/lists?d="
+				+ Constants.APP_DEBUG + "&t=" + Constants.TOKEN + "&column_id="
+				+ column_id + "&p=" + p + "&r=" + r;
+
+		System.out.println(url);
+
+		final FinalHttp httpRequest = new FinalHttp();
+		httpRequest.get(url, new AjaxCallBack<Object>() {
+
+			@Override
+			public void onFailure(Throwable t, int errorNo, String strMsg) {
+				// TODO Auto-generated method stub
+				super.onFailure(t, errorNo, strMsg);
+
+				ArticleListEntity entity = new ArticleListEntity();
+				entity.error();
+				callBack.result(entity);
+
+			}
+
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+				super.onStart();
+			}
+
+			@Override
+			public void onSuccess(Object t) {
+				// TODO Auto-generated method stub
+				super.onSuccess(t);
+
+				System.out.println("t:" + t);
+
+				ArticleListJosnParser json = new ArticleListJosnParser();
+				json.setJson(t.toString());
+				ArticleListEntity entity = json.parser();
+				callBack.result(entity);
+
+			}
+
+		});
+
+	}
+
+	/**
+	 * 获取文章
+	 */
+	public static void getColumnArticleList(String column_id, String p,
+			String r, final WHTTHttpRequestCallBack callBack) {
+
+		String url = Constants.URL_BASE + "/Api/Files/lists?d="
 				+ Constants.APP_DEBUG + "&t=" + Constants.TOKEN + "&column_id="
 				+ column_id + "&p=" + p + "&r=" + r;
 
@@ -881,6 +938,54 @@ public class RemoteUtils {
 	}
 
 	/**
+	 * 获取获取动态栏目
+	 */
+	public static void getTitleAndType(final WHTTHttpRequestCallBack callBack) {
+
+		String url = Constants.URL_BASE + "/Api/Files/get_column?d="
+				+ Constants.APP_DEBUG + "&t=" + Constants.TOKEN;
+
+		System.out.println(url);
+
+		final FinalHttp httpRequest = new FinalHttp();
+		httpRequest.get(url, new AjaxCallBack<Object>() {
+
+			@Override
+			public void onFailure(Throwable t, int errorNo, String strMsg) {
+				// TODO Auto-generated method stub
+				super.onFailure(t, errorNo, strMsg);
+
+				TitleListEntity entity = new TitleListEntity();
+				entity.error();
+				callBack.result(entity);
+
+			}
+
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+				super.onStart();
+			}
+
+			@Override
+			public void onSuccess(Object t) {
+				// TODO Auto-generated method stub
+				super.onSuccess(t);
+
+				System.out.println("t:" + t);
+
+				ColumnTitleListJosnParser json = new ColumnTitleListJosnParser();
+				json.setJson(t.toString());
+				TitleListEntity entity = json.parser();
+				callBack.result(entity);
+
+			}
+
+		});
+
+	}
+
+	/**
 	 * 获取TOP week
 	 */
 	public static void getArea(final WHTTHttpRequestCallBack callBack) {
@@ -1441,5 +1546,205 @@ public class RemoteUtils {
 			}
 
 		});
+	}
+
+	/**
+	 * 获取lasttime
+	 */
+	public static void getDian(String lasttime,
+			final WHTTHttpRequestCallBack callBack) {
+
+		String url = Constants.URL_BASE + "/Api/Message/checkMessage?d="
+				+ Constants.APP_DEBUG + "&t=" + Constants.TOKEN + "&lasttime="
+				+ lasttime;
+
+		System.out.println(url);
+
+		final FinalHttp httpRequest = new FinalHttp();
+		httpRequest.get(url, new AjaxCallBack<Object>() {
+
+			@Override
+			public void onFailure(Throwable t, int errorNo, String strMsg) {
+				// TODO Auto-generated method stub
+				super.onFailure(t, errorNo, strMsg);
+
+				DianEntity entity = new DianEntity();
+				entity.error();
+				callBack.result(entity);
+
+			}
+
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+				super.onStart();
+			}
+
+			@Override
+			public void onSuccess(Object t) {
+				// TODO Auto-generated method stub
+				super.onSuccess(t);
+
+				System.out.println("t:" + t);
+
+				DianJosnParser json = new DianJosnParser();
+				json.setJson(t.toString());
+				DianEntity entity = json.parser();
+				callBack.result(entity);
+
+			}
+
+		});
+
+	}
+
+	/**
+	 * 获取getMsg
+	 */
+	public static void getMsg(String lasttime, String p, String r,
+			final WHTTHttpRequestCallBack callBack) {
+
+		String url = Constants.URL_BASE + "/Api/Message/get?d="
+				+ Constants.APP_DEBUG + "&t=" + Constants.TOKEN + "&r=" + r
+				+ "&p=" + p + lasttime;
+
+		System.out.println(url);
+
+		final FinalHttp httpRequest = new FinalHttp();
+		httpRequest.get(url, new AjaxCallBack<Object>() {
+
+			@Override
+			public void onFailure(Throwable t, int errorNo, String strMsg) {
+				// TODO Auto-generated method stub
+				super.onFailure(t, errorNo, strMsg);
+
+				MsgDianListEntity entity = new MsgDianListEntity();
+				entity.error();
+				callBack.result(entity);
+
+			}
+
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+				super.onStart();
+			}
+
+			@Override
+			public void onSuccess(Object t) {
+				// TODO Auto-generated method stub
+				super.onSuccess(t);
+
+				System.out.println("t:" + t);
+
+				MsgDianListJosnParser json = new MsgDianListJosnParser();
+				json.setJson(t.toString());
+				MsgDianListEntity entity = json.parser();
+				callBack.result(entity);
+
+			}
+
+		});
+
+	}
+
+	/**
+	 * 发送邮箱email
+	 */
+	public static void sendEmail(String id, String email,
+			final WHTTHttpRequestCallBack callBack) {
+
+		String url = Constants.URL_BASE + "/User/Personal/sendEmail?d="
+				+ Constants.APP_DEBUG + "&t=" + Constants.TOKEN + "&email="
+				+ email + "&id=" + id;
+
+		System.out.println(url);
+
+		final FinalHttp httpRequest = new FinalHttp();
+		httpRequest.get(url, new AjaxCallBack<Object>() {
+
+			@Override
+			public void onFailure(Throwable t, int errorNo, String strMsg) {
+				// TODO Auto-generated method stub
+				super.onFailure(t, errorNo, strMsg);
+
+				BaseEntity entity = new BaseEntity();
+				entity.error();
+				callBack.result(entity);
+
+			}
+
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+				super.onStart();
+			}
+
+			@Override
+			public void onSuccess(Object t) {
+				// TODO Auto-generated method stub
+				super.onSuccess(t);
+
+				System.out.println("t:" + t);
+
+				BaseJosnParser json = new BaseJosnParser();
+				json.setJson(t.toString());
+				BaseEntity entity = json.parser();
+				callBack.result(entity);
+
+			}
+
+		});
+
+	}
+
+	/**
+	 * 获取Custom
+	 */
+	public static void getCustom(String p, String r,
+			final WHTTHttpRequestCallBack callBack) {
+
+		String url = Constants.URL_BASE + "/Api/CustomList/get?d="
+				+ Constants.APP_DEBUG + "&t=" + Constants.TOKEN + "&r=" + r
+				+ "&p=" + p;
+
+		System.out.println(url);
+
+		final FinalHttp httpRequest = new FinalHttp();
+		httpRequest.get(url, new AjaxCallBack<Object>() {
+
+			@Override
+			public void onFailure(Throwable t, int errorNo, String strMsg) {
+				// TODO Auto-generated method stub
+				super.onFailure(t, errorNo, strMsg);
+
+				CustomListEntity entity = new CustomListEntity();
+				entity.error();
+				callBack.result(entity);
+
+			}
+
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+				super.onStart();
+			}
+
+			@Override
+			public void onSuccess(Object t) {
+				// TODO Auto-generated method stub
+				super.onSuccess(t);
+
+				System.out.println("t:" + t);
+
+				CustomListJosnParser json = new CustomListJosnParser();
+				json.setJson(t.toString());
+				CustomListEntity entity = json.parser();
+				callBack.result(entity);
+
+			}
+
+		});
+
 	}
 }

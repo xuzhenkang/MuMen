@@ -7,7 +7,6 @@ import org.json.JSONObject;
 import android.util.Log;
 
 import com.uesugi.mumen.entity.UploadEntity;
-import com.uesugi.mumen.entity.UserEntity;
 
 public class UploadJosnParser {
 

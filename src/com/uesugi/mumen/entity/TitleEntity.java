@@ -18,4 +18,5 @@ public class TitleEntity extends Object implements Serializable {
 
 	public String id = "";
 	public String title = "";
+	public String icon = "";
 }

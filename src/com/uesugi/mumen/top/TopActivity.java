@@ -35,7 +35,9 @@ import android.widget.TextView;
 
 import com.uesugi.mumen.CircleImageView;
 import com.uesugi.mumen.R;
+import com.uesugi.mumen.adapter.CustomAdapter;
 import com.uesugi.mumen.adapter.ShopAdapter;
+import com.uesugi.mumen.entity.CustomListEntity;
 import com.uesugi.mumen.entity.TopListEntity;
 import com.uesugi.mumen.pulldown.PullDownView;
 import com.uesugi.mumen.pulldown.PullDownView.OnPullDownListener;
@@ -96,7 +98,8 @@ public class TopActivity extends FinalActivity {
 	private TextView mTextTab4;
 	@ViewInject(id = R.id.top_txt_tab5, click = "btnTab5")
 	private TextView mTextTab5;
-
+	@ViewInject(id = R.id.top_txt_tab6, click = "btnTab6")
+	private TextView mTextTab6;
 	@ViewInject(id = R.id.top_txt_city1, click = "btnCity1")
 	private TextView mTextCity1;
 	@ViewInject(id = R.id.top_txt_city2, click = "btnCity2")
@@ -116,11 +119,20 @@ public class TopActivity extends FinalActivity {
 	private ImageView mImgVTri4;
 	@ViewInject(id = R.id.top_imgv_tri5)
 	private ImageView mImgVTri5;
-
+	@ViewInject(id = R.id.top_imgv_tri6)
+	private ImageView mImgVTri6;
 	@ViewInject(id = R.id.top_layout_1)
 	private RelativeLayout mLayoutTab1;
 	@ViewInject(id = R.id.top_layout_2)
 	private RelativeLayout mLayoutTab2;
+	@ViewInject(id = R.id.top_layout_6)
+	private RelativeLayout mLayoutTab6;
+
+	@ViewInject(id = R.id.top_tab_layout_tab6)
+	private RelativeLayout mLayoutTopTab6;
+
+	@ViewInject(id = R.id.data_nodata)
+	private RelativeLayout mLayoutNodata;
 
 	@ViewInject(id = R.id.top_txt_paihang, click = "btnList")
 	private TextView mTextPaihang;
@@ -150,7 +162,7 @@ public class TopActivity extends FinalActivity {
 	private TopListEntity mEntity4 = null;
 
 	private TopListEntity mEntity5 = null;
-
+	private CustomListEntity mEntity6 = null;
 	private FinalBitmap mFinalBitmap;
 
 	private Bitmap mDefaultBitmap;
@@ -170,6 +182,16 @@ public class TopActivity extends FinalActivity {
 
 	private String city_type = "1";
 
+	private CustomAdapter mAdapter6;
+	private ListView mListView6;
+	private PullDownView mPullDownView6;
+	private int visibleLastIndex6;
+	private boolean isLoading6 = false;
+	private int p6 = 0;
+	private boolean mFlagLoading6 = false;
+
+	private RelativeLayout mViewFoot6 = null;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -180,6 +202,7 @@ public class TopActivity extends FinalActivity {
 		initView();
 		mTextPaihang.setText("周度销量排行榜");
 		getList1();
+		getList6();
 	}
 
 	private void initView() {
@@ -268,6 +291,61 @@ public class TopActivity extends FinalActivity {
 
 		mPullDownView3.enableAutoFetchMore(false, 1, false);
 
+		/*
+		 * 1.使用PullDownView 2.设置OnPullDownListener 3.从mPullDownView里面获取ListView
+		 */
+		mPullDownView6 = (PullDownView) findViewById(R.id.top_pull_down_view6);
+
+		mPullDownView6.setOnPullDownListener(new OnPullDownListener() {
+
+			@Override
+			public void onRefresh() {
+				// TODO Auto-generated method stub
+				mAdapter6.clearAll();
+				mFlagLoading6 = false;
+				p6 = 0;
+				mViewFoot6.setVisibility(View.GONE);
+				getList6();
+			}
+
+			@Override
+			public void onMore() {
+				// TODO Auto-generated method stub
+				mPullDownView6.notifyDidMore();
+			}
+		});
+		mListView6 = mPullDownView6.getListView();
+		mPullDownView6.setBackgroundResource(R.color.transparent);
+		mListView6.setBackgroundResource(R.color.transparent);
+
+		mListView6.setSelector(R.color.transparent);
+		// 去掉ListView 边缘模糊
+		mListView6.setFadingEdgeLength(0);
+		// 加载翻页样式
+		RelativeLayout ViewFoot6 = (RelativeLayout) LayoutInflater.from(
+				mContext).inflate(R.layout.layout_list_foot, null);
+		mViewFoot6 = (RelativeLayout) ViewFoot6.findViewById(R.id.foot_view);
+		mViewFoot6.setVisibility(View.GONE);
+		mListView6.addFooterView(ViewFoot6);
+
+		mListView6.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+		mListView6.setDividerHeight(0);
+		// mAdapter = new NewsAdapter(mContext, mFid);
+
+		mAdapter6 = new CustomAdapter(mContext, mFinalBitmap);
+		mListView6.setAdapter(mAdapter6);
+
+		mListView6.setOnScrollListener(mOnScrollListener6);
+
+		mPullDownView6.enableAutoFetchMore(false, 1, false);
 	}
 
 	private void setGroup1(TopListEntity entity) {
@@ -276,6 +354,7 @@ public class TopActivity extends FinalActivity {
 			mImgVIcon.setImageBitmap(mDefaultBitmap);
 			mTextRank.setText("");
 			mTextName.setText("");
+			mLayoutNodata.setVisibility(View.VISIBLE);
 			return;
 		}
 
@@ -434,7 +513,7 @@ public class TopActivity extends FinalActivity {
 		if (city_type.equals("1")) {
 			return;
 		}
-
+		mLayoutNodata.setVisibility(View.GONE);
 		mTextCity1.setTextColor(Color.parseColor("#f5a671"));
 		mTextCity2.setTextColor(Color.parseColor("#757575"));
 		mTextCity3.setTextColor(Color.parseColor("#757575"));
@@ -457,7 +536,7 @@ public class TopActivity extends FinalActivity {
 		if (city_type.equals("2")) {
 			return;
 		}
-
+		mLayoutNodata.setVisibility(View.GONE);
 		mTextCity2.setTextColor(Color.parseColor("#f5a671"));
 		mTextCity1.setTextColor(Color.parseColor("#757575"));
 		mTextCity3.setTextColor(Color.parseColor("#757575"));
@@ -480,7 +559,7 @@ public class TopActivity extends FinalActivity {
 		if (city_type.equals("3")) {
 			return;
 		}
-
+		mLayoutNodata.setVisibility(View.GONE);
 		mTextCity3.setTextColor(Color.parseColor("#f5a671"));
 		mTextCity2.setTextColor(Color.parseColor("#757575"));
 		mTextCity1.setTextColor(Color.parseColor("#757575"));
@@ -503,7 +582,7 @@ public class TopActivity extends FinalActivity {
 		if (city_type.equals("4")) {
 			return;
 		}
-
+		mLayoutNodata.setVisibility(View.GONE);
 		mTextCity4.setTextColor(Color.parseColor("#f5a671"));
 		mTextCity2.setTextColor(Color.parseColor("#757575"));
 		mTextCity3.setTextColor(Color.parseColor("#757575"));
@@ -523,21 +602,23 @@ public class TopActivity extends FinalActivity {
 	}
 
 	public void btnTab1(View v) {
+		mLayoutNodata.setVisibility(View.GONE);
 		index = "1";
 		mTextTab1.setTextColor(Color.parseColor("#f5a671"));
 		mTextTab2.setTextColor(Color.parseColor("#757575"));
 		mTextTab3.setTextColor(Color.parseColor("#757575"));
 		mTextTab4.setTextColor(Color.parseColor("#757575"));
 		mTextTab5.setTextColor(Color.parseColor("#757575"));
-
+		mTextTab6.setTextColor(Color.parseColor("#757575"));
 		mImgVTri1.setVisibility(View.VISIBLE);
 		mImgVTri2.setVisibility(View.GONE);
 		mImgVTri3.setVisibility(View.GONE);
 		mImgVTri4.setVisibility(View.GONE);
 		mImgVTri5.setVisibility(View.GONE);
-
+		mImgVTri6.setVisibility(View.GONE);
 		mLayoutTab1.setVisibility(View.VISIBLE);
 		mLayoutTab2.setVisibility(View.GONE);
+		mLayoutTab6.setVisibility(View.GONE);
 		mTextPaihang.setText("周度销量排行榜");
 		// if (mEntity1 == null) {
 		mTextCity1.setTextColor(Color.parseColor("#f5a671"));
@@ -557,21 +638,23 @@ public class TopActivity extends FinalActivity {
 	}
 
 	public void btnTab2(View v) {
+		mLayoutNodata.setVisibility(View.GONE);
 		index = "2";
 		mTextTab2.setTextColor(Color.parseColor("#f5a671"));
 		mTextTab1.setTextColor(Color.parseColor("#757575"));
 		mTextTab3.setTextColor(Color.parseColor("#757575"));
 		mTextTab4.setTextColor(Color.parseColor("#757575"));
 		mTextTab5.setTextColor(Color.parseColor("#757575"));
-
+		mTextTab6.setTextColor(Color.parseColor("#757575"));
 		mImgVTri2.setVisibility(View.VISIBLE);
 		mImgVTri1.setVisibility(View.GONE);
 		mImgVTri3.setVisibility(View.GONE);
 		mImgVTri4.setVisibility(View.GONE);
 		mImgVTri5.setVisibility(View.GONE);
-
+		mImgVTri6.setVisibility(View.GONE);
 		mLayoutTab1.setVisibility(View.VISIBLE);
 		mLayoutTab2.setVisibility(View.GONE);
+		mLayoutTab6.setVisibility(View.GONE);
 		mTextPaihang.setText("月度销量排行榜");
 		// if (mEntity2 == null) {
 		mTextCity1.setTextColor(Color.parseColor("#f5a671"));
@@ -591,21 +674,23 @@ public class TopActivity extends FinalActivity {
 	}
 
 	public void btnTab3(View v) {
+		mLayoutNodata.setVisibility(View.GONE);
 		index = "3";
 		mTextTab3.setTextColor(Color.parseColor("#f5a671"));
 		mTextTab2.setTextColor(Color.parseColor("#757575"));
 		mTextTab1.setTextColor(Color.parseColor("#757575"));
 		mTextTab4.setTextColor(Color.parseColor("#757575"));
 		mTextTab5.setTextColor(Color.parseColor("#757575"));
+		mTextTab6.setTextColor(Color.parseColor("#757575"));
 		mLayoutTab1.setVisibility(View.VISIBLE);
 		mLayoutTab2.setVisibility(View.GONE);
-
+		mLayoutTab6.setVisibility(View.GONE);
 		mImgVTri3.setVisibility(View.VISIBLE);
 		mImgVTri2.setVisibility(View.GONE);
 		mImgVTri1.setVisibility(View.GONE);
 		mImgVTri4.setVisibility(View.GONE);
 		mImgVTri5.setVisibility(View.GONE);
-
+		mImgVTri6.setVisibility(View.GONE);
 		mTextPaihang.setText("季度销量排行榜");
 		// if (mEntity3 == null) {
 		mTextCity1.setTextColor(Color.parseColor("#f5a671"));
@@ -625,20 +710,23 @@ public class TopActivity extends FinalActivity {
 	}
 
 	public void btnTab4(View v) {
+		mLayoutNodata.setVisibility(View.GONE);
 		index = "4";
 		mTextTab4.setTextColor(Color.parseColor("#f5a671"));
 		mTextTab2.setTextColor(Color.parseColor("#757575"));
 		mTextTab3.setTextColor(Color.parseColor("#757575"));
 		mTextTab1.setTextColor(Color.parseColor("#757575"));
 		mTextTab5.setTextColor(Color.parseColor("#757575"));
+		mTextTab6.setTextColor(Color.parseColor("#757575"));
 		mLayoutTab1.setVisibility(View.VISIBLE);
 		mLayoutTab2.setVisibility(View.GONE);
+		mLayoutTab6.setVisibility(View.GONE);
 		mImgVTri4.setVisibility(View.VISIBLE);
 		mImgVTri2.setVisibility(View.GONE);
 		mImgVTri3.setVisibility(View.GONE);
 		mImgVTri1.setVisibility(View.GONE);
 		mImgVTri5.setVisibility(View.GONE);
-
+		mImgVTri6.setVisibility(View.GONE);
 		mTextPaihang.setText("年度销量排行榜");
 		// if (mEntity4 == null) {
 		mTextCity1.setTextColor(Color.parseColor("#f5a671"));
@@ -671,17 +759,41 @@ public class TopActivity extends FinalActivity {
 		mTextTab3.setTextColor(Color.parseColor("#757575"));
 		mTextTab4.setTextColor(Color.parseColor("#757575"));
 		mTextTab1.setTextColor(Color.parseColor("#757575"));
+		mTextTab6.setTextColor(Color.parseColor("#757575"));
 		mLayoutTab1.setVisibility(View.GONE);
+		mLayoutTab6.setVisibility(View.GONE);
 		mLayoutTab2.setVisibility(View.VISIBLE);
 		mImgVTri5.setVisibility(View.VISIBLE);
 		mImgVTri2.setVisibility(View.GONE);
 		mImgVTri3.setVisibility(View.GONE);
 		mImgVTri4.setVisibility(View.GONE);
 		mImgVTri1.setVisibility(View.GONE);
-
+		mImgVTri6.setVisibility(View.GONE);
 		if (mEntity5 == null) {
 			getList5();
 		}
+	}
+
+	public void btnTab6(View v) {
+
+		mTextTab6.setTextColor(Color.parseColor("#f5a671"));
+		mTextTab2.setTextColor(Color.parseColor("#757575"));
+		mTextTab3.setTextColor(Color.parseColor("#757575"));
+		mTextTab4.setTextColor(Color.parseColor("#757575"));
+		mTextTab1.setTextColor(Color.parseColor("#757575"));
+		mTextTab5.setTextColor(Color.parseColor("#757575"));
+		mLayoutTab1.setVisibility(View.GONE);
+		mLayoutTab2.setVisibility(View.GONE);
+		mLayoutTab6.setVisibility(View.VISIBLE);
+		mImgVTri6.setVisibility(View.VISIBLE);
+		mImgVTri2.setVisibility(View.GONE);
+		mImgVTri3.setVisibility(View.GONE);
+		mImgVTri4.setVisibility(View.GONE);
+		mImgVTri1.setVisibility(View.GONE);
+		mImgVTri5.setVisibility(View.GONE);
+		// if (mEntity6 == null) {
+		// getList5();
+		// }
 	}
 
 	public void getList1() {
@@ -698,7 +810,7 @@ public class TopActivity extends FinalActivity {
 					if (entity.resultCode.equals("1310")) {
 
 					} else {
-
+						mLayoutNodata.setVisibility(View.VISIBLE);
 					}
 				} else {
 					mEntity1 = entity;
@@ -723,7 +835,7 @@ public class TopActivity extends FinalActivity {
 					if (entity.resultCode.equals("1310")) {
 
 					} else {
-
+						mLayoutNodata.setVisibility(View.VISIBLE);
 					}
 				} else {
 					mEntity2 = entity;
@@ -748,7 +860,7 @@ public class TopActivity extends FinalActivity {
 					if (entity.resultCode.equals("1310")) {
 
 					} else {
-
+						mLayoutNodata.setVisibility(View.VISIBLE);
 					}
 				} else {
 					mEntity3 = entity;
@@ -773,7 +885,7 @@ public class TopActivity extends FinalActivity {
 					if (entity.resultCode.equals("1310")) {
 
 					} else {
-
+						mLayoutNodata.setVisibility(View.VISIBLE);
 					}
 				} else {
 					mEntity4 = entity;
@@ -824,6 +936,47 @@ public class TopActivity extends FinalActivity {
 		});
 	}
 
+	public void getList6() {
+		p6 += 1;
+		RemoteUtils.getCustom(p6 + "", "20", new WHTTHttpRequestCallBack() {
+
+			@Override
+			public void result(Object obj) {
+
+				CustomListEntity entity = (CustomListEntity) obj;
+
+				isLoading6 = false;
+				mPullDownView6.notifyDidLoad();
+				try {
+					mPullDownView6.notifyDidRefresh();
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+				if (!entity.success) {
+					if (entity.resultCode.equals("1310")) {
+
+					} else {
+
+					}
+				} else {
+					mEntity6 = entity;
+					mTextTab6.setText(entity.name);
+					mLayoutTopTab6.setVisibility(View.VISIBLE);
+					mAdapter6.setData(mEntity6.list, entity.name);
+					if (mEntity6.list.size() == 20) {
+						mFlagLoading6 = true;
+						mViewFoot6.setVisibility(View.VISIBLE);
+
+					} else {
+						mFlagLoading6 = false;
+						mViewFoot6.setVisibility(View.GONE);
+					}
+				}
+
+			}
+		});
+	}
+
 	private AbsListView.OnScrollListener mOnScrollListener3 = new AbsListView.OnScrollListener() {
 
 		public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -851,6 +1004,38 @@ public class TopActivity extends FinalActivity {
 			// TODO Auto-generated method stub
 			// if (mFid.equals("1")) {
 			visibleLastIndex3 = firstVisibleItem + visibleItemCount - 1;
+			// } else {
+			// visibleLastIndex = firstVisibleItem + visibleItemCount - 1;
+			// }
+		}
+	};
+	private AbsListView.OnScrollListener mOnScrollListener6 = new AbsListView.OnScrollListener() {
+
+		public void onScrollStateChanged(AbsListView view, int scrollState) {
+			// TODO Auto-generated method stub
+			int itemsLastIndex = mAdapter6.getCount();
+
+			if (itemsLastIndex >= 0) {
+				Log.e("xxxxxxxx", visibleLastIndex6 + "///" + itemsLastIndex);
+				if (scrollState == OnScrollListener.SCROLL_STATE_IDLE
+						&& visibleLastIndex6 == itemsLastIndex
+						&& isLoading6 == false && mFlagLoading6) {
+
+					// 翻页请求
+					isLoading6 = true;
+					Log.e("OnScrollListener6", "yes");
+					getList6();
+				}
+
+			}
+
+		}
+
+		public void onScroll(AbsListView view, int firstVisibleItem,
+				int visibleItemCount, int totalItemCount) {
+			// TODO Auto-generated method stub
+			// if (mFid.equals("1")) {
+			visibleLastIndex6 = firstVisibleItem + visibleItemCount - 1;
 			// } else {
 			// visibleLastIndex = firstVisibleItem + visibleItemCount - 1;
 			// }

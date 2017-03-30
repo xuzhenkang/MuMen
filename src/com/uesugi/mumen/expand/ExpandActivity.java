@@ -8,6 +8,7 @@ import net.tsz.afinal.FinalBitmap;
 import net.tsz.afinal.annotation.view.ViewInject;
 import net.tsz.afinal.bitmap.core.BitmapDisplayConfig;
 import net.tsz.afinal.bitmap.display.Displayer;
+import android.R.integer;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -25,9 +26,11 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
@@ -227,6 +230,8 @@ public class ExpandActivity extends FinalActivity {
 	@ViewInject(id = R.id.expand_btn_ok, click = "btnOk")
 	private ImageButton mBtnOk;
 
+	private LinearLayout mLayoutHeaderMain;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -236,6 +241,7 @@ public class ExpandActivity extends FinalActivity {
 		mContext = this;
 		initView();
 		getTitleList();
+		getTitleAndTypeList();
 	}
 
 	private void initView() {
@@ -266,6 +272,8 @@ public class ExpandActivity extends FinalActivity {
 		Resources res = mContext.getResources();
 		mDefaultBitmap = BitmapFactory.decodeResource(res,
 				R.drawable.bg_default_list);
+		mDefaultBitmap2 = BitmapFactory.decodeResource(res,
+				R.drawable.bg_default_banner_dz);
 		mDefaultBitmap3 = BitmapFactory.decodeResource(res,
 				R.drawable.bg_default_photo);
 		mDefaultBitmap4 = BitmapFactory.decodeResource(res,
@@ -307,6 +315,8 @@ public class ExpandActivity extends FinalActivity {
 				.inflate(R.layout.layout_list_header, null);
 		mGroup = (ViewGroup) ViewHeader.findViewById(R.id.viewGroup_hd);
 		mViewPager = (MyViewPager) ViewHeader.findViewById(R.id.myviewpager_hd);
+		mLayoutHeaderMain = (LinearLayout) ViewHeader
+				.findViewById(R.id.header_layout_main);
 		mLayoutHd = (RelativeLayout) ViewHeader
 				.findViewById(R.id.header_layout_hd);
 		ImageView bg = (ImageView) ViewHeader.findViewById(R.id.header_imgv_bg);
@@ -366,57 +376,8 @@ public class ExpandActivity extends FinalActivity {
 			}
 		});
 		mListView1.addHeaderView(ViewHeader);
-		// 加载幻灯下面的那个
-		LinearLayout ViewHeaderX = (LinearLayout) LayoutInflater.from(mContext)
-				.inflate(R.layout.row_expand_header, null);
-		CircleImageView pict1 = (CircleImageView) ViewHeaderX
-				.findViewById(R.id.row_expand_header_imgv_1);
-		TextView name1 = (TextView) ViewHeaderX
-				.findViewById(R.id.row_expand_txt_name1);
 
-		CircleImageView pict2 = (CircleImageView) ViewHeaderX
-				.findViewById(R.id.row_expand_header_imgv_2);
-		TextView name2 = (TextView) ViewHeaderX
-				.findViewById(R.id.row_expand_txt_name2);
-
-		LinearLayout layout1 = (LinearLayout) ViewHeaderX
-				.findViewById(R.id.row_expand_header_layout_1);
-		LinearLayout layout2 = (LinearLayout) ViewHeaderX
-				.findViewById(R.id.row_expand_header_layout_2);
-
-		Bitmap bitmap1 = BitmapFactory.decodeResource(res,
-				R.drawable.img_picture);
-		Bitmap bitmap2 = BitmapFactory
-				.decodeResource(res, R.drawable.img_music);
-
-		pict1.setImageBitmap(bitmap1);
-
-		pict2.setImageBitmap(bitmap2);
-		layout1.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Intent intent = new Intent();
-				intent.setClass(mContext, PromotionActivity3.class);
-				intent.putExtra("id", "24");
-				intent.putExtra("title", "装饰画下载");
-				startActivity(intent);
-			}
-		});
-		layout2.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Intent intent = new Intent();
-				intent.setClass(mContext, PromotionActivity3.class);
-				intent.putExtra("id", "25");
-				intent.putExtra("title", "音乐下载");
-				startActivity(intent);
-			}
-		});
-		mListView1.addHeaderView(ViewHeaderX);
+		// mListView1.addHeaderView(ViewHeaderX);
 		// 加载翻页样式
 		RelativeLayout ViewFoot = (RelativeLayout) LayoutInflater
 				.from(mContext).inflate(R.layout.layout_list_foot, null);
@@ -550,7 +511,11 @@ public class ExpandActivity extends FinalActivity {
 			}
 		});
 		mListView3.addHeaderView(ViewHeader2);
-
+		//
+		LinearLayout more = (LinearLayout) LayoutInflater.from(mContext)
+				.inflate(R.layout.layout_more_header, null);
+		mListView3.addHeaderView(more);
+		
 		// 加载翻页样式
 		RelativeLayout ViewFoot3 = (RelativeLayout) LayoutInflater.from(
 				mContext).inflate(R.layout.layout_list_foot, null);
@@ -740,6 +705,7 @@ public class ExpandActivity extends FinalActivity {
 
 							}
 						} else {
+
 							mEntity1 = entity;
 							mAdapter1.setData(mEntity1.list);
 							if (mEntity1.list.size() == 20) {
@@ -1466,6 +1432,174 @@ public class ExpandActivity extends FinalActivity {
 		});
 	}
 
+	public void getTitleAndTypeList() {
+
+		RemoteUtils.getTitleAndType(new WHTTHttpRequestCallBack() {
+
+			@Override
+			public void result(Object obj) {
+				// TODO Auto-generated method stub
+				TitleListEntity entity = (TitleListEntity) obj;
+
+				if (!entity.success) {
+
+				} else {
+					initColumn(entity);
+
+				}
+
+			}
+		});
+	}
+
+	public void initColumn(final TitleListEntity entity) {
+		mLayoutHeaderMain.removeAllViews();
+		int num = entity.list.size() / 3;
+		if (entity.list.size() % 3 > 0) {
+			num += 1;
+		}
+		for (int i = 0; i < num; i++) {
+			final int ii = i;
+
+			// 加载幻灯下面的那个
+			LinearLayout ViewHeaderX = (LinearLayout) LayoutInflater.from(
+					mContext).inflate(R.layout.row_expand_header, null);
+			CircleImageView pict1 = (CircleImageView) ViewHeaderX
+					.findViewById(R.id.row_expand_header_imgv_1);
+			TextView t1name1 = (TextView) ViewHeaderX
+					.findViewById(R.id.row_expand_header_txt_name_1);
+
+			CircleImageView pict2 = (CircleImageView) ViewHeaderX
+					.findViewById(R.id.row_expand_header_imgv_2);
+			TextView t1name2 = (TextView) ViewHeaderX
+					.findViewById(R.id.row_expand_header_txt_name_2);
+			CircleImageView pict3 = (CircleImageView) ViewHeaderX
+					.findViewById(R.id.row_expand_header_imgv_3);
+			TextView t1name3 = (TextView) ViewHeaderX
+					.findViewById(R.id.row_expand_header_txt_name_3);
+			LinearLayout t1layout1 = (LinearLayout) ViewHeaderX
+					.findViewById(R.id.row_expand_header_layout_1);
+			LinearLayout t1layout2 = (LinearLayout) ViewHeaderX
+					.findViewById(R.id.row_expand_header_layout_2);
+			LinearLayout t1layout3 = (LinearLayout) ViewHeaderX
+					.findViewById(R.id.row_expand_header_layout_3);
+			if ((ii * 3) < entity.list.size()) {
+				t1layout1.setVisibility(View.VISIBLE);
+				pict1.setImageBitmap(mDefaultBitmap2);
+				if (!StringUtils.isBlank(entity.list.get(ii * 3).icon)) {
+
+					mFinalBitmap.display(pict1, entity.list.get(ii * 3).icon,
+							mDefaultBitmap2, mDefaultBitmap2);
+
+				} else {
+					pict1.setImageBitmap(mDefaultBitmap2);
+				}
+				t1name1.setText(entity.list.get(ii * 3).title);
+				t1layout1.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						Intent intent = new Intent();
+						intent.setClass(mContext, PromotionActivity3.class);
+						intent.putExtra("id", entity.list.get(ii * 3).id);
+						intent.putExtra("title", entity.list.get(ii * 3).title);
+						startActivity(intent);
+					}
+				});
+			} else {
+				t1layout1.setVisibility(View.INVISIBLE);
+			}
+			if ((ii * 3) + 1 < entity.list.size()) {
+				t1layout2.setVisibility(View.VISIBLE);
+				pict2.setImageBitmap(mDefaultBitmap2);
+				if (!StringUtils.isBlank(entity.list.get(ii * 3 + 1).icon)) {
+
+					mFinalBitmap.display(pict2,
+							entity.list.get(ii * 3 + 1).icon, mDefaultBitmap2,
+							mDefaultBitmap2);
+
+				} else {
+					pict2.setImageBitmap(mDefaultBitmap2);
+				}
+				t1name2.setText(entity.list.get(ii * 3 + 1).title);
+				t1layout2.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						Intent intent = new Intent();
+						intent.setClass(mContext, PromotionActivity3.class);
+						intent.putExtra("id", entity.list.get(ii * 3 + 1).id);
+						intent.putExtra("title",
+								entity.list.get(ii * 3 + 1).title);
+						startActivity(intent);
+					}
+				});
+			} else {
+				t1layout2.setVisibility(View.GONE);
+			}
+			if ((ii * 3) + 2 < entity.list.size()) {
+				t1layout3.setVisibility(View.VISIBLE);
+				pict3.setImageBitmap(mDefaultBitmap2);
+				if (!StringUtils.isBlank(entity.list.get(ii * 3 + 2).icon)) {
+
+					mFinalBitmap.display(pict3,
+							entity.list.get(ii * 3 + 2).icon, mDefaultBitmap2,
+							mDefaultBitmap2);
+
+				} else {
+					pict3.setImageBitmap(mDefaultBitmap2);
+				}
+				t1name3.setText(entity.list.get(ii * 3 + 2).title);
+				t1layout3.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						Intent intent = new Intent();
+						intent.setClass(mContext, PromotionActivity3.class);
+						intent.putExtra("id", entity.list.get(ii * 3 + 2).id);
+						intent.putExtra("title",
+								entity.list.get(ii * 3 + 2).title);
+						startActivity(intent);
+					}
+				});
+			} else {
+				t1layout3.setVisibility(View.GONE);
+			}
+			// pict1.setImageBitmap(bitmap1);
+			//
+			// pict2.setImageBitmap(bitmap2);
+			// t1layout1.setOnClickListener(new OnClickListener() {
+			//
+			// @Override
+			// public void onClick(View v) {
+			// // TODO Auto-generated method stub
+			// Intent intent = new Intent();
+			// intent.setClass(mContext, PromotionActivity3.class);
+			// intent.putExtra("id", t1Id1);
+			// intent.putExtra("title", "装饰画下载");
+			// startActivity(intent);
+			// }
+			// });
+			// t1layout2.setOnClickListener(new OnClickListener() {
+			//
+			// @Override
+			// public void onClick(View v) {
+			// // TODO Auto-generated method stub
+			// Intent intent = new Intent();
+			// intent.setClass(mContext, PromotionActivity3.class);
+			// intent.putExtra("id", t1Id2);
+			// intent.putExtra("title", "音乐下载");
+			// startActivity(intent);
+			// }
+			// });
+			mLayoutHeaderMain.addView(ViewHeaderX);
+		}
+
+	}
+
 	public void getField() {
 
 		mDialog.showProgressDlg(Constants.MESSAGE_PROGRESS);
@@ -1493,6 +1627,9 @@ public class ExpandActivity extends FinalActivity {
 
 	}
 
+	private List<ImageView> mBgList = new ArrayList<ImageView>();
+	private List<TextView> mTextList = new ArrayList<TextView>();
+
 	private void initField() {
 
 		Log.e("mEntity.list.size() * 50 + 110",
@@ -1508,11 +1645,49 @@ public class ExpandActivity extends FinalActivity {
 					.findViewById(R.id.row_field_txt_name);
 			EditText content = (EditText) view
 					.findViewById(R.id.row_field_edit_content);
+			ImageView bg = (ImageView) view
+					.findViewById(R.id.row_field_iv_content_bg);
 			name.setText(mEntity.list.get(i).title + ":");
 			content.setHint("请输入" + mEntity.list.get(i).title + "!");
+			mTextList.add(name);
+			mBgList.add(bg);
 			mEditList.add(content);
 
 			mLayoutMain.addView(view);
+
+		}
+
+		if (mEntity.list.size() > 0) {
+			int x = 0;
+			int p = 0;
+			for (int i = 0; i < mEntity.list.size(); i++) {
+				if (mEntity.list.get(i).title.length() > x) {
+					p = i;
+					x = mEntity.list.get(i).title.length();
+				}
+			}
+			final TextView xTextView = mTextList.get(p);
+			ViewTreeObserver mViewTreeObserver = xTextView
+					.getViewTreeObserver();
+			mViewTreeObserver
+					.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+						@Override
+						public void onGlobalLayout() {
+							// TODO Auto-generated method stub
+							xTextView.getViewTreeObserver()
+									.removeGlobalOnLayoutListener(this);
+							int w = Constants.width
+									- DisplayUtil.dip2px(mContext, 70)
+									- xTextView.getWidth();
+							for (int i = 0; i < mEditList.size(); i++) {
+								mEditList.get(i).getLayoutParams().width = w;
+								mEditList.get(i).requestLayout();
+								mBgList.get(i).getLayoutParams().width = w;
+								mBgList.get(i).requestLayout();
+							}
+
+						}
+					});
 
 		}
 		mLayoutBg.setVisibility(View.VISIBLE);

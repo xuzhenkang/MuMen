@@ -33,6 +33,7 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
 import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
 
 import com.uesugi.mumen.R;
+import com.uesugi.mumen.onTouchDownloadListener;
 import com.uesugi.mumen.adapter.ArticleAdapter4;
 import com.uesugi.mumen.entity.ArticleListEntity;
 import com.uesugi.mumen.pulldown.PullDownView;
@@ -194,18 +195,30 @@ public class PromotionActivity3 extends FinalActivity {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				// TODO Auto-generated method stub
-				if (position < mAdapter4.mListEntity.size()) {
-					showShare(false, null,
-							mAdapter4.mListEntity.get(position).title,
-							mAdapter4.mListEntity.get(position).url,
-							mAdapter4.mListEntity.get(position).icon);
-				}
+//				if (position < mAdapter4.mListEntity.size()) {
+//					showShare(false, null,
+//							mAdapter4.mListEntity.get(position).title,
+//							mAdapter4.mListEntity.get(position).url,
+//							mAdapter4.mListEntity.get(position).icon);
+//				}
 			}
 		});
 		mListView4.setDividerHeight(0);
 		// mAdapter = new NewsAdapter(mContext, mFid);
 
 		mAdapter4 = new ArticleAdapter4(mContext, mFinalBitmap);
+		mAdapter4.setOnTouchDownloadListener(new onTouchDownloadListener() {
+			
+			@Override
+			public void onTouch(int position) {
+				// TODO Auto-generated method stub
+				showShare(false, null,
+						mAdapter4.mListEntity.get(position).title,
+						mAdapter4.mListEntity.get(position).url,
+						mAdapter4.mListEntity.get(position).icon);
+			}
+		});
+		
 		mListView4.setAdapter(mAdapter4);
 
 		mListView4.setOnScrollListener(mOnScrollListener4);
@@ -250,7 +263,7 @@ public class PromotionActivity3 extends FinalActivity {
 	public void getList4() {
 		mDialog.showProgressDlg(Constants.MESSAGE_PROGRESS);
 		p4 += 1;
-		RemoteUtils.getArticleList(id, p4 + "", "20",
+		RemoteUtils.getColumnArticleList(id, p4 + "", "20",
 				new WHTTHttpRequestCallBack() {
 
 					@Override

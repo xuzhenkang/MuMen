@@ -8,7 +8,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="100dip"
-        android:background="@drawable/mm_white2default"
+        android:background="#ffffff"
         android:orientation="horizontal" >
 
         <RelativeLayout
@@ -41,17 +41,58 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="13dip"
-                android:layout_marginRight="50dip"
+                android:layout_marginRight="120dip"
                 android:textColor="#555555"
                 android:textSize="16sp" />
 
-            <ImageView
-                android:layout_width="30dip"
-                android:layout_height="30dip"
+            <LinearLayout
+                android:id="@+id/row_article_layout_eye"
+                android:layout_width="50dip"
+                android:layout_height="fill_parent"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="13dip"
-                android:background="@drawable/icon_download" />
+                android:layout_marginRight="50dip"
+                android:gravity="center"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:layout_width="25dip"
+                    android:layout_height="25dip"
+                    android:background="@drawable/icon_eye" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dip"
+                    android:text="预览"
+                    android:textColor="#f5a671"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/row_article_layout_download"
+                android:layout_width="50dip"
+                android:layout_height="fill_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="0dip"
+                android:gravity="center"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:layout_width="25dip"
+                    android:layout_height="25dip"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/icon_download" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dip"
+                    android:text="下载"
+                    android:textColor="#f5a671"
+                    android:textSize="12sp" />
+            </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
 

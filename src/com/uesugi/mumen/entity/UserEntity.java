@@ -34,6 +34,10 @@ public class UserEntity extends Object implements Serializable {
 	public String factory_id = "";
 	public String factory_name = "";
 	public String factory_icon = "";
+	public String factory_email = "";
 	public String store_name = "";
 	public String store_icon = "";
+	public String report_content = "";
+	public String assep_content = "";
+	public String share_content = "";
 }

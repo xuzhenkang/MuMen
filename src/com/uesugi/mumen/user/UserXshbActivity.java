@@ -8,15 +8,23 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import net.tsz.afinal.FinalActivity;
+import net.tsz.afinal.FinalBitmap;
 import net.tsz.afinal.annotation.view.ViewInject;
+import net.tsz.afinal.bitmap.core.BitmapDisplayConfig;
+import net.tsz.afinal.bitmap.display.Displayer;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.Window;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -25,8 +33,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import cn.sharesdk.framework.authorize.f;
-
+import com.uesugi.mumen.GuangGaoActivity;
 import com.uesugi.mumen.R;
 import com.uesugi.mumen.entity.BaseEntity;
 import com.uesugi.mumen.entity.FieldListEntity;
@@ -76,8 +83,13 @@ public class UserXshbActivity extends FinalActivity {
 	private Context mContext = null;
 	@ViewInject(id = R.id.top_view_btn_left, click = "btnLeft")
 	private ImageButton mTopBtnLeft;
+	// @ViewInject(id = R.id.top_view_textbtn_right, click = "btnRight")
+	// private Button mTopBtnRight;
 	@ViewInject(id = R.id.top_view_title)
 	private TextView mTextTopTitle;
+
+	@ViewInject(id = R.id.xshb_txt_jj)
+	private TextView mTextJJ;
 
 	private ShowAlertDialog mDialog = null;
 
@@ -124,6 +136,16 @@ public class UserXshbActivity extends FinalActivity {
 		finish();
 	}
 
+	public void btnRight(View v) {
+		Intent intent = new Intent();
+		intent.setClass(mContext, GuangGaoActivity.class);
+		intent.putExtra("title", "提报说明");
+		intent.putExtra("url",
+				"http://115.28.137.139:89/Api/Public/get_html_report?id="
+						+ Constants.entityUser.factory_id);
+		startActivity(intent);
+	}
+
 	private void initView() {
 		mImgVHBG.setLayoutParams(new RelativeLayout.LayoutParams(
 				Constants.width, (int) ((Constants.width - DisplayUtil.dip2px(
@@ -134,12 +156,40 @@ public class UserXshbActivity extends FinalActivity {
 						- DisplayUtil.dip2px(mContext, 20),
 						(int) ((Constants.width - DisplayUtil.dip2px(mContext,
 								20)) * 0.39f)));
+		FinalBitmap mFinalBitmap = FinalBitmap.create(mContext);
+		mFinalBitmap.configDisplayer(new Displayer() {
+
+			@Override
+			public void loadFailDisplay(View arg0, Bitmap arg1) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void loadCompletedisplay(View arg0, Bitmap arg1,
+					BitmapDisplayConfig arg2) {
+				// TODO Auto-generated method stub
+				ImageView x = (ImageView) arg0;
+				x.setImageBitmap(arg1);
+				// if(arg0.getId()==R.id.more_imgv_icon){
+				//
+				// }
+			}
+		});
+		mFinalBitmap.display(mImgVHIcon,
+				"http://115.28.137.139:89/Api/Public/get_pic_report?id="
+						+ Constants.entityUser.factory_id);
 
 		mTopBtnLeft.setVisibility(View.VISIBLE);
+		// mTopBtnRight.setVisibility(View.VISIBLE);
+		// mTopBtnRight.setText("提报说明");
 		mDialog = new ShowAlertDialog(mContext);
 
 		mTextTopTitle.setText("销售汇报");
-
+		if (!StringUtils.isBlank(Constants.entityUser.report_content)) {
+			mTextJJ.setVisibility(View.VISIBLE);
+			mTextJJ.setText(Constants.entityUser.report_content);
+		}
 		Resources res = mContext.getResources();
 
 		Date date = new Date();// 取时间
@@ -147,12 +197,14 @@ public class UserXshbActivity extends FinalActivity {
 		calendar.setTime(date);
 		calendar.add(calendar.DATE, -1);// 把日期往后增加一天.整数往后推,负数往前移动
 		date = calendar.getTime(); // 这个时间就是日期往后推一天的结果
+		SimpleDateFormat formatter0 = new SimpleDateFormat("yyyy");
 		SimpleDateFormat formatter = new SimpleDateFormat("MM");
 		SimpleDateFormat formatter2 = new SimpleDateFormat("dd");
+		String y = formatter0.format(date);
 		String m = formatter.format(date);
 		String d = formatter2.format(date);
 
-		mTextDate.setText(m + "月" + d + "日");
+		mTextDate.setText(y + "年" + m + "月" + d + "日");
 	}
 
 	public void btnOk(View v) {
@@ -231,6 +283,9 @@ public class UserXshbActivity extends FinalActivity {
 
 	}
 
+	private List<ImageView> mBgList = new ArrayList<ImageView>();
+	private List<TextView> mTextList = new ArrayList<TextView>();
+
 	private void initField() {
 
 		Log.e("mEntity.list.size() * 50 + 110",
@@ -244,13 +299,50 @@ public class UserXshbActivity extends FinalActivity {
 					.inflate(R.layout.row_field_list, null);
 			TextView name = (TextView) view
 					.findViewById(R.id.row_field_txt_name);
+			ImageView bg = (ImageView) view
+					.findViewById(R.id.row_field_iv_content_bg);
 			EditText content = (EditText) view
 					.findViewById(R.id.row_field_edit_content);
 			name.setText(mEntity.list.get(i).title + ":");
 			content.setHint("请输入" + mEntity.list.get(i).title + "!");
+			mTextList.add(name);
+			mBgList.add(bg);
 			mEditList.add(content);
 
 			mLayoutMain.addView(view);
+
+		}
+		if (mEntity.list.size() > 0) {
+			int x = 0;
+			int p = 0;
+			for (int i = 0; i < mEntity.list.size(); i++) {
+				if (mEntity.list.get(i).title.length() > x) {
+					p = i;
+					x = mEntity.list.get(i).title.length();
+				}
+			}
+			final TextView xTextView = mTextList.get(p);
+			ViewTreeObserver mViewTreeObserver = xTextView
+					.getViewTreeObserver();
+			mViewTreeObserver
+					.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+						@Override
+						public void onGlobalLayout() {
+							// TODO Auto-generated method stub
+							xTextView.getViewTreeObserver()
+									.removeGlobalOnLayoutListener(this);
+							int w = Constants.width
+									- DisplayUtil.dip2px(mContext, 70)
+									- xTextView.getWidth();
+							for (int i = 0; i < mEditList.size(); i++) {
+								mEditList.get(i).getLayoutParams().width = w;
+								mEditList.get(i).requestLayout();
+								mBgList.get(i).getLayoutParams().width = w;
+								mBgList.get(i).requestLayout();
+							}
+
+						}
+					});
 
 		}
 		mLayoutBg.setVisibility(View.VISIBLE);

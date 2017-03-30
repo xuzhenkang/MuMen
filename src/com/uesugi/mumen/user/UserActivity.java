@@ -2,9 +2,6 @@ package com.uesugi.mumen.user;
 
 import java.io.File;
 
-import lecho.lib.filechooser.FilechooserActivity;
-import lecho.lib.filechooser.ItemType;
-import lecho.lib.filechooser.SelectionMode;
 import net.tsz.afinal.FinalActivity;
 import net.tsz.afinal.FinalBitmap;
 import net.tsz.afinal.annotation.view.ViewInject;
@@ -85,8 +82,14 @@ public class UserActivity extends FinalActivity {
 	private RelativeLayout mLayoutDz;
 	@ViewInject(id = R.id.user_layout_sj, click = "btnSj")
 	private RelativeLayout mLayoutSj;
+	@ViewInject(id = R.id.user_layout_msg, click = "btnMsg")
+	private RelativeLayout mLayoutMsg;
 	@ViewInject(id = R.id.user_layout_exit, click = "btnExit")
 	private RelativeLayout mLayoutExit;
+
+	@ViewInject(id = R.id.user_imgv_msgdian)
+	private ImageView mImgVMsgDian;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -126,6 +129,7 @@ public class UserActivity extends FinalActivity {
 
 		alog.create().show();
 	}
+
 	public void btnRight(View v) {
 		finish();
 	}
@@ -148,6 +152,21 @@ public class UserActivity extends FinalActivity {
 		startActivity(intent);
 	}
 
+	public void btnMsg(View v) {
+		mImgVMsgDian.setVisibility(View.GONE);
+		if (Constants.mainActivity != null) {
+			Constants.mainActivity.closeDian("5");
+		}
+		Intent intent = new Intent();
+		intent.setClass(mContext, MsgActivity.class);
+		startActivity(intent);
+	}
+	public void showMsgDian(){
+		mImgVMsgDian.setVisibility(View.VISIBLE);
+	}
+	public void closeMsgDian(){
+		mImgVMsgDian.setVisibility(View.GONE);
+	}
 	private void initView() {
 		mDialog = new ShowAlertDialog(mContext);
 
@@ -189,6 +208,15 @@ public class UserActivity extends FinalActivity {
 			mLayoutSj.setVisibility(View.VISIBLE);
 		}
 
+		if (Constants.mainActivity != null) {
+			if (Constants.mainActivity.getDian5Show()) {
+				mImgVMsgDian.setVisibility(View.VISIBLE);
+			} else {
+				mImgVMsgDian.setVisibility(View.GONE);
+			}
+
+		}
+
 	}
 
 	public void btnIcon(View v) {
@@ -213,7 +241,7 @@ public class UserActivity extends FinalActivity {
 	}
 
 	private void initUser() {
-		
+
 		mImgVIcon.setImageBitmap(mDefaultBitmap);
 		if (Constants.entityUser.role.equals("1")) {
 
@@ -323,11 +351,12 @@ public class UserActivity extends FinalActivity {
 						998);
 
 			} else if (msg.what == MSG_OPEN_CARMERA) {
-				
+
 				String fileName = FileUtils.createFileName() + ".jpg";
-				
-				//System.out.println("文件保存路径: " + Constants.IMAGE_CACHE_PATH + " 文件名: " + fileName);
-				
+
+				// System.out.println("文件保存路径: " + Constants.IMAGE_CACHE_PATH +
+				// " 文件名: " + fileName);
+
 				mTempCameraFile = new File(Constants.IMAGE_CACHE_PATH, fileName);
 
 				Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -361,8 +390,7 @@ public class UserActivity extends FinalActivity {
 				myHandler.sendMessage(message);
 
 			} else if (msg.what == MSG_OPEN_CROP) {
-				
-				
+
 				String path = String.valueOf(msg.obj);
 
 				Uri uri = Uri.fromFile(new File(path));
@@ -400,9 +428,9 @@ public class UserActivity extends FinalActivity {
 						mDialog.dismissProgressDlg();
 
 						if (entity.success) {
-							
+
 							Constants.entityUser = entity.l_user;
-							
+
 							// Constants.TOKEN = entity.l_user.token;
 							UserPreferences.saveUserPref(mContext,
 									Constants.entityUser);

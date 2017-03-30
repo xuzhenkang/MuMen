@@ -7,20 +7,30 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.uesugi.mumen.entity.BaseEntity;
+import com.uesugi.mumen.entity.DianEntity;
+import com.uesugi.mumen.entity.MsgDianListEntity;
 import com.uesugi.mumen.expand.ExpandActivity;
 import com.uesugi.mumen.promotion.PromotionActivity;
 import com.uesugi.mumen.sales.SalesActivity;
 import com.uesugi.mumen.top.TopActivity;
-import com.uesugi.mumen.user.LoginActivity;
 import com.uesugi.mumen.user.UserActivity;
 import com.uesugi.mumen.utils.Constants;
 import com.uesugi.mumen.utils.FileUtils;
+import com.uesugi.mumen.utils.RemoteUtils;
 import com.uesugi.mumen.utils.ShowAlertDialog;
+import com.uesugi.mumen.utils.StringUtils;
+import com.uesugi.mumen.utils.UserPreferences;
+import com.uesugi.mumen.utils.WHTTHttpRequestCallBack;
 
 /**
  * TabActivity首页 应用核心！
@@ -66,6 +76,17 @@ public class MainActivity extends TabActivity implements OnClickListener {
 	private boolean mFlagJPush = false;
 	private String mPage;
 
+	private ImageView mImgVDian1 = null;
+	private ImageView mImgVDian2 = null;
+	private ImageView mImgVDian3 = null;
+	private ImageView mImgVDian5 = null;
+
+	private EditText mEditName;
+	private RelativeLayout mLayoutNameShow;
+	private RelativeLayout mLayoutNameBg;
+	private TextView mTextNameCancel;
+	private TextView mBtnNameOk;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -91,9 +112,29 @@ public class MainActivity extends TabActivity implements OnClickListener {
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);// 获取分辨率
 		Constants.width = dm.widthPixels;
+		Constants.height = dm.heightPixels;
 		Constants.width5_1 = dm.widthPixels / 5;
 		// Constants.userCityEntity = UserPreferences.loadCityPref(mContext);
 		initView();
+		String lastTime = UserPreferences.loadTimePref(mContext,
+				Constants.entityUser.id);
+		if (lastTime == null) {
+
+			long tsLong = System.currentTimeMillis() / 1000;
+			String ts = tsLong + "";
+			UserPreferences.saveTimePref(mContext, ts, Constants.entityUser.id);
+		} else {
+			getDianList(lastTime);
+		}
+		String msgTime = UserPreferences.loadMsgTimePref(mContext,
+				Constants.entityUser.id);
+		if (msgTime == null) {
+
+			getMsg("");
+		} else {
+			getMsg("&lasttime=" + msgTime);
+
+		}
 
 	}
 
@@ -126,7 +167,7 @@ public class MainActivity extends TabActivity implements OnClickListener {
 		case R.id.main_layout_tab1: {
 
 			setCurrentTabByTag(TAG_TBA1);
-
+			mImgVDian1.setVisibility(View.GONE);
 			mImgVTab1.setSelected(true);
 			mImgVTab2.setSelected(false);
 			mImgVTab3.setSelected(false);
@@ -137,6 +178,7 @@ public class MainActivity extends TabActivity implements OnClickListener {
 		case R.id.main_layout_tab2: {
 
 			setCurrentTabByTag(TAG_TBA2);
+			mImgVDian2.setVisibility(View.GONE);
 			mImgVTab2.setSelected(true);
 			mImgVTab1.setSelected(false);
 			mImgVTab3.setSelected(false);
@@ -148,6 +190,7 @@ public class MainActivity extends TabActivity implements OnClickListener {
 		case R.id.main_layout_tab3: {
 
 			setCurrentTabByTag(TAG_TBA3);
+			mImgVDian3.setVisibility(View.GONE);
 			mImgVTab3.setSelected(true);
 			mImgVTab1.setSelected(false);
 			mImgVTab2.setSelected(false);
@@ -192,6 +235,52 @@ public class MainActivity extends TabActivity implements OnClickListener {
 	}
 
 	private void initView() {
+		mEditName = (EditText) findViewById(R.id.promotion_et_name);
+		mLayoutNameShow = (RelativeLayout) findViewById(R.id.promotion_ly_name_show);
+		mLayoutNameShow.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+		mLayoutNameBg = (RelativeLayout) findViewById(R.id.promotion_ly_name_bg);
+		mLayoutNameBg.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				mLayoutNameBg.setVisibility(View.GONE);
+			}
+		});
+		mTextNameCancel = (TextView) findViewById(R.id.promotion_btn_cancel);
+		mTextNameCancel.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				mLayoutNameBg.setVisibility(View.GONE);
+			}
+		});
+		mBtnNameOk = (TextView) findViewById(R.id.promotion_btn_ok);
+		mBtnNameOk.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				String mail = mEditName.getText().toString();
+
+				if (StringUtils.isBlank(mail)) {
+					Toast.makeText(mContext, "请输入您的邮箱地址!", Toast.LENGTH_SHORT).show();
+					return;
+				}
+
+				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(mEditName.getWindowToken(), 0);
+				sendEmail(mail);
+			}
+		});
 
 		mDialog = new ShowAlertDialog(mContext);
 
@@ -200,6 +289,12 @@ public class MainActivity extends TabActivity implements OnClickListener {
 		mImgVTab3 = (ImageView) findViewById(R.id.main_imgv_tab3);
 		mImgVTab4 = (ImageView) findViewById(R.id.main_imgv_tab4);
 		mImgVTab5 = (ImageView) findViewById(R.id.main_imgv_tab5);
+
+		mImgVDian1 = (ImageView) findViewById(R.id.main_imgv_dian1);
+		mImgVDian2 = (ImageView) findViewById(R.id.main_imgv_dian2);
+		mImgVDian3 = (ImageView) findViewById(R.id.main_imgv_dian3);
+		mImgVDian5 = (ImageView) findViewById(R.id.main_imgv_dian5);
+
 		mLayoutTab1 = (RelativeLayout) findViewById(R.id.main_layout_tab1);
 		mLayoutTab2 = (RelativeLayout) findViewById(R.id.main_layout_tab2);
 		mLayoutTab3 = (RelativeLayout) findViewById(R.id.main_layout_tab3);
@@ -251,6 +346,107 @@ public class MainActivity extends TabActivity implements OnClickListener {
 		// TODO Auto-generated method stub
 		super.onPause();
 		// JPushInterface.onPause(mContext);
+	}
+
+	public void closeDian(String index) {
+		if (index.equals("1")) {
+			mImgVDian1.setVisibility(View.GONE);
+		} else if (index.equals("2")) {
+			mImgVDian2.setVisibility(View.GONE);
+		} else if (index.equals("3")) {
+			mImgVDian3.setVisibility(View.GONE);
+		} else if (index.equals("5")) {
+			mImgVDian5.setVisibility(View.GONE);
+		}
+	}
+
+	public void getDianList(String lasttime) {
+
+		RemoteUtils.getDian(lasttime, new WHTTHttpRequestCallBack() {
+
+			@Override
+			public void result(Object obj) {
+				// TODO Auto-generated method stub
+				DianEntity entity = (DianEntity) obj;
+
+				if (!entity.success) {
+
+				} else {
+					if (entity.column1.equals("0")) {
+						mImgVDian1.setVisibility(View.GONE);
+					} else {
+						mImgVDian1.setVisibility(View.VISIBLE);
+					}
+					if (entity.column2.equals("0")) {
+						mImgVDian2.setVisibility(View.GONE);
+					} else {
+						mImgVDian2.setVisibility(View.VISIBLE);
+					}
+					if (entity.column3.equals("0")) {
+						mImgVDian3.setVisibility(View.GONE);
+					} else {
+						mImgVDian3.setVisibility(View.VISIBLE);
+					}
+				}
+
+			}
+		});
+	}
+
+	public void getMsg(String lasttime) {
+
+		RemoteUtils.getMsg(lasttime, "1", "20", new WHTTHttpRequestCallBack() {
+
+			@Override
+			public void result(Object obj) {
+				// TODO Auto-generated method stub
+				MsgDianListEntity entity = (MsgDianListEntity) obj;
+
+				if (!entity.success) {
+
+				} else {
+					long tsLong = System.currentTimeMillis() / 1000;
+					String ts = tsLong + "";
+					UserPreferences.saveMsgTimePref(mContext, ts,
+							Constants.entityUser.id);
+					if (entity.list.size() > 0) {
+						mImgVDian5.setVisibility(View.VISIBLE);
+					} else {
+						mImgVDian5.setVisibility(View.GONE);
+					}
+
+				}
+
+			}
+		});
+	}
+
+	public boolean getDian5Show() {
+		if (mImgVDian5.isShown()) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
+	public void setDian5Show() {
+		mImgVDian5.setVisibility(View.VISIBLE);
+
+	}
+
+	public void showMsgDian() {
+		mImgVDian5.setVisibility(View.VISIBLE);
+		if (Constants.userActivity != null) {
+			Constants.userActivity.showMsgDian();
+		}
+	}
+
+	public void closeMsgDian() {
+		mImgVDian5.setVisibility(View.GONE);
+		if (Constants.userActivity != null) {
+			Constants.userActivity.closeMsgDian();
+		}
 	}
 
 	// public void doJPush(String name) {
@@ -346,5 +542,36 @@ public class MainActivity extends TabActivity implements OnClickListener {
 		startActivity(intent);
 		finish();
 
+	}
+
+	private String mMailId = "";
+
+	public void showMailEdit(String id) {
+		mMailId = id;
+		mEditName.setText("");
+		mLayoutNameBg.setVisibility(View.VISIBLE);
+	}
+
+	public void sendEmail(String email) {
+		mDialog.showProgressDlg(Constants.MESSAGE_PROGRESS);
+		RemoteUtils.sendEmail(mMailId, email, new WHTTHttpRequestCallBack() {
+
+			@Override
+			public void result(Object obj) {
+				// TODO Auto-generated method stub
+				BaseEntity entity = (BaseEntity) obj;
+				mDialog.dismissProgressDlg();
+				if (!entity.success) {
+					Toast.makeText(mContext, entity.msg, Toast.LENGTH_SHORT)
+							.show();
+				} else {
+					Toast.makeText(mContext, "提交成功！", Toast.LENGTH_SHORT)
+					.show();
+					mLayoutNameBg.setVisibility(View.GONE);
+
+				}
+
+			}
+		});
 	}
 }

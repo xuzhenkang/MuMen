@@ -16,12 +16,14 @@ package com.uesugi.mumen;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import cn.jpush.android.api.JPushInterface;
 
 import com.uesugi.mumen.utils.Constants;
+import com.uesugi.mumen.utils.CrashHandler;
 
 public class MuMenApplication extends Application {
 
-	private final static String TAG = "LoveCityWideApplication";
+	private final static String TAG = "MuMenApplication";
 
 	public static Context applicationContext;
 	private static MuMenApplication instance;
@@ -32,7 +34,8 @@ public class MuMenApplication extends Application {
 		// LeCloud.init(getApplicationContext());
 		applicationContext = this;
 		instance = this;
-		// JPushInterface.init(this);
+//		CrashHandler.getInstance().init(applicationContext);
+		JPushInterface.init(this);
 
 	}
 

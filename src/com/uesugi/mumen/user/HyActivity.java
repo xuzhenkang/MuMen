@@ -213,13 +213,16 @@ public class HyActivity extends FinalActivity {
 				HyEntity entity = (HyEntity) obj;
 
 				if (!entity.success) {
-
+					finish();
 				} else {
-
-					Log.e("HyEntity", entity.list.size() + "");
-					entity.list.add("xxx");
-					mPicurlList = entity.list;
-					setHD();
+					if (entity.list.size() == 0) {
+						finish();
+					} else {
+						Log.e("HyEntity", entity.list.size() + "");
+						entity.list.add("xxx");
+						mPicurlList = entity.list;
+						setHD();
+					}
 				}
 
 			}
@@ -317,12 +320,8 @@ public class HyActivity extends FinalActivity {
 				String pic = mPicurlList.get(i);
 				ImageView imageView = new ImageView(mContext);
 				imageView.setScaleType(ScaleType.FIT_XY);
-				RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-						new RelativeLayout.LayoutParams(
-								LayoutParams.MATCH_PARENT,
-								LayoutParams.MATCH_PARENT));
-
-				imageView.setLayoutParams(layoutParams);
+				imageView.setLayoutParams(new LayoutParams(Constants.width,
+						Constants.height));
 
 				if (!StringUtils.isBlank(pic)) {
 					if (pic.equals("sp1")) {

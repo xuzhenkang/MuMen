@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import com.uesugi.mumen.MainActivity;
 import com.uesugi.mumen.entity.UploadEntity;
 import com.uesugi.mumen.entity.UserEntity;
+import com.uesugi.mumen.user.UserActivity;
 
 public class Constants {
 
@@ -51,20 +52,20 @@ public class Constants {
 	public static Bitmap dzysBitmap4 = null;
 	public static Bitmap dzysBitmap5 = null;
 	public static UploadEntity dzysUploadEntity = null;
-	
-	
+
 	public static final String APP_DEBUG = "0";
 	public static String TOKEN = "";
 
 	public static int width;
 	public static int width5_1;
+	public static int height;
 	public static String MESSAGE_REQUEST_ERROR2 = "努力加载中...";
 	public static String MESSAGE_PROGRESS = "请稍后...";
 	public static String MESSAGE_REQUEST_ERROR = "请求失败，请稍后重试!";
 	// http://182.92.228.30:8080/Yiht/index.php
 	// http://192.168.1.102/Yiht/index.php
-	public static final String URL_BASE = "http://115.28.137.139:89";
-	public static final String URL_IMAGE = "http://115.28.137.139:92";
+	public static final String URL_BASE = "http://app.a3xy.com/zztianhua/index.php";
+	public static final String URL_IMAGE = "http://app.a3xy.com/zztianhua/index.php";
 	public static String URL_TOKEN = null;
 
 	public static UserEntity entityUser = null;
@@ -150,6 +151,7 @@ public class Constants {
 	// public static MyMsgActivity mma = null;
 	// public static MyMsgInfoActivity mmia = null;
 	public static MainActivity mainActivity = null;
+	public static UserActivity userActivity = null;
 	// public static MeActivity mea = null;
 	// public static String uid = null;
 

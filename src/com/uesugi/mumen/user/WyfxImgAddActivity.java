@@ -363,19 +363,23 @@ public class WyfxImgAddActivity extends FinalActivity {
 			if (mImgIndex.equals("1")) {
 				Constants.wyfxBitmap1 = null;
 				Constants.wyfxBitmap1 = setImage(data.getData());
+				mImgV2.setVisibility(View.VISIBLE);
 				mImgV1.setImageBitmap(Constants.wyfxBitmap1);
 			} else if (mImgIndex.equals("2")) {
 				Constants.wyfxBitmap2 = null;
 				Constants.wyfxBitmap2 = setImage(data.getData());
 				mImgV2.setImageBitmap(Constants.wyfxBitmap2);
+				mImgV3.setVisibility(View.VISIBLE);
 			} else if (mImgIndex.equals("3")) {
 				Constants.wyfxBitmap3 = null;
 				Constants.wyfxBitmap3 = setImage(data.getData());
 				mImgV3.setImageBitmap(Constants.wyfxBitmap3);
+				mImgV4.setVisibility(View.VISIBLE);
 			} else if (mImgIndex.equals("4")) {
 				Constants.wyfxBitmap4 = null;
 				Constants.wyfxBitmap4 = setImage(data.getData());
 				mImgV3.setImageBitmap(Constants.wyfxBitmap4);
+				mImgV5.setVisibility(View.VISIBLE);
 			} else if (mImgIndex.equals("5")) {
 				Constants.wyfxBitmap5 = null;
 				Constants.wyfxBitmap5 = setImage(data.getData());

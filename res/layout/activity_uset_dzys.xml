@@ -38,9 +38,20 @@
                         android:id="@+id/header_imgv_icon"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/img_sales_picture" />
+                        android:background="@drawable/img_sales_picture"
+                        android:scaleType="fitXY" />
                 </LinearLayout>
             </RelativeLayout>
+
+            <TextView
+                android:id="@+id/dzys_txt_jj"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:layout_marginTop="10dip"
+                android:background="@drawable/bg_xshb_jj"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -54,7 +65,7 @@
                 <RelativeLayout
                     android:id="@+id/dzys_layout_bg"
                     android:layout_width="match_parent"
-                    android:layout_height="110dip" >
+                    android:layout_height="120dip" >
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -65,6 +76,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="fill_parent"
                         android:orientation="vertical" >
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="10dip" />
 
                         <LinearLayout
                             android:id="@+id/dzys_layout_main"

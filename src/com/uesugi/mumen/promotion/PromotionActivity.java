@@ -26,6 +26,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
@@ -35,10 +36,13 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.Platform.ShareParams;
 import cn.sharesdk.framework.PlatformActionListener;
@@ -52,6 +56,7 @@ import com.uesugi.mumen.GuangGaoActivity;
 import com.uesugi.mumen.MyViewPager;
 import com.uesugi.mumen.MyViewPager.OnSingleTouchListener;
 import com.uesugi.mumen.R;
+import com.uesugi.mumen.onTouchDownloadListener;
 import com.uesugi.mumen.adapter.ArticleAdapter;
 import com.uesugi.mumen.adapter.ArticleAdapter3;
 import com.uesugi.mumen.adapter.ArticleAdapter4;
@@ -68,6 +73,7 @@ import com.uesugi.mumen.utils.DisplayUtil;
 import com.uesugi.mumen.utils.RemoteUtils;
 import com.uesugi.mumen.utils.ShowAlertDialog;
 import com.uesugi.mumen.utils.StringUtils;
+import com.uesugi.mumen.utils.UserPreferences;
 import com.uesugi.mumen.utils.WHTTHttpRequestCallBack;
 
 /**
@@ -205,6 +211,8 @@ public class PromotionActivity extends FinalActivity {
 	@ViewInject(id = R.id.promotion_txt_content)
 	private TextView mTextContent;
 
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -212,11 +220,11 @@ public class PromotionActivity extends FinalActivity {
 		setContentView(R.layout.activity_promotion);
 
 		mContext = this;
-		
+
 		LeCloud.init(getApplicationContext());
 		initView();
 		getTitleList();
-//		checkLogin();
+		// checkLogin();
 
 	}
 
@@ -254,6 +262,8 @@ public class PromotionActivity extends FinalActivity {
 		Resources res = mContext.getResources();
 		mDefaultBitmap = BitmapFactory.decodeResource(res,
 				R.drawable.bg_default_list);
+		mDefaultBitmap2 = BitmapFactory.decodeResource(res,
+				R.drawable.logo_email);
 		mDefaultBitmap3 = BitmapFactory.decodeResource(res,
 				R.drawable.bg_default_photo);
 		/*
@@ -499,18 +509,81 @@ public class PromotionActivity extends FinalActivity {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				// TODO Auto-generated method stub
-				if (position < mAdapter4.mListEntity.size()) {
-					showShare(false, null,
-							mAdapter4.mListEntity.get(position).title,
-							mAdapter4.mListEntity.get(position).url,
-							mAdapter4.mListEntity.get(position).icon);
-				}
+				// if (position < mAdapter4.mListEntity.size()) {
+				// showShare(false, null,
+				// mAdapter4.mListEntity.get(position).title,
+				// mAdapter4.mListEntity.get(position).url,
+				// mAdapter4.mListEntity.get(position).icon);
+				// }
 			}
 		});
 		mListView4.setDividerHeight(0);
 		// mAdapter = new NewsAdapter(mContext, mFid);
 
 		mAdapter4 = new ArticleAdapter4(mContext, mFinalBitmap);
+		mAdapter4.setOnTouchDownloadListener(new onTouchDownloadListener() {
+
+			@Override
+			public void onTouch(final int position) {
+				// TODO Auto-generated method stub
+				String state = UserPreferences.loadDownloadPref(mContext);
+				if (StringUtils.isBlank(state)) {
+
+					AlertDialog.Builder alog = new Builder(mContext);
+					alog.setTitle("提示");
+					alog.setMessage("请将下载链接发送至邮箱或者QQ，然后到电脑端下载");
+					alog.setNegativeButton("确定",
+							new DialogInterface.OnClickListener() {
+
+								public void onClick(DialogInterface dialog,
+										int which) {
+									// TODO Auto-generated method stub
+
+									dialog.dismiss();
+									showShare(
+											false,
+											null,
+											mAdapter4.mListEntity.get(position).title,
+											mAdapter4.mListEntity.get(position).url,
+											mAdapter4.mListEntity.get(position).icon,
+											mAdapter4.mListEntity.get(position).id);
+								}
+
+							});
+
+					alog.setPositiveButton("以后不再显示",
+							new DialogInterface.OnClickListener() {
+
+								public void onClick(DialogInterface dialog,
+										int which) {
+									// TODO Auto-generated method stub
+
+									dialog.dismiss();
+									UserPreferences.saveDownloadPref(mContext,
+											"1");
+									showShare(
+											false,
+											null,
+											mAdapter4.mListEntity.get(position).title,
+											mAdapter4.mListEntity.get(position).url,
+											mAdapter4.mListEntity.get(position).icon,
+											mAdapter4.mListEntity.get(position).id);
+								}
+
+							});
+
+					alog.create().show();
+
+				} else {
+					showShare(false, null,
+							mAdapter4.mListEntity.get(position).title,
+							mAdapter4.mListEntity.get(position).url,
+							mAdapter4.mListEntity.get(position).icon,
+							mAdapter4.mListEntity.get(position).id);
+				}
+
+			}
+		});
 		mListView4.setAdapter(mAdapter4);
 
 		mListView4.setOnScrollListener(mOnScrollListener4);
@@ -1063,14 +1136,19 @@ public class PromotionActivity extends FinalActivity {
 					ImageView imageView2 = new ImageView(mContext);
 					imageView.setScaleType(ScaleType.FIT_XY);
 					imageView2.setScaleType(ScaleType.FIT_XY);
-					RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-							new RelativeLayout.LayoutParams(
-									LayoutParams.MATCH_PARENT,
-									LayoutParams.MATCH_PARENT));
-					layoutParams.leftMargin = Constants.width / 120;
-					layoutParams.rightMargin = Constants.width / 120;
-					imageView.setLayoutParams(layoutParams);
-					imageView2.setLayoutParams(layoutParams);
+					// RelativeLayout.LayoutParams layoutParams = new
+					// RelativeLayout.LayoutParams(
+					// new RelativeLayout.LayoutParams(
+					// LayoutParams.MATCH_PARENT,
+					// LayoutParams.MATCH_PARENT));
+					// // layoutParams.leftMargin = Constants.width / 120;
+					// // layoutParams.rightMargin = Constants.width / 120;
+					imageView.setLayoutParams(new LayoutParams(
+							LayoutParams.MATCH_PARENT,
+							LayoutParams.MATCH_PARENT));
+					imageView2.setLayoutParams(new LayoutParams(
+							LayoutParams.MATCH_PARENT,
+							LayoutParams.MATCH_PARENT));
 					if (!StringUtils.isBlank(entity.pic)) {
 						mFinalBitmap.display(imageView, entity.pic);
 						mFinalBitmap.display(imageView2, entity.pic);
@@ -1114,11 +1192,24 @@ public class PromotionActivity extends FinalActivity {
 	}
 
 	private void showShare(boolean silent, String platform, String title,
-			String url, String icon) {
+			String url, String icon,final String id) {
 		ShareSDK.initSDK(this);
 		OnekeyShare oks = new OnekeyShare();
 		// 关闭sso授权
 		oks.disableSSOWhenAuthorize();
+
+		oks.setCustomerLogo(mDefaultBitmap2, mDefaultBitmap2, "邮件",
+				new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						if (Constants.mainActivity!=null) {
+							Constants.mainActivity.showMailEdit(id);
+						}
+					}
+				});
+
 		oks.setTitle(title);
 		oks.setTitleUrl(url);
 		oks.setText(title);

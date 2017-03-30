@@ -1,6 +1,8 @@
 package com.uesugi.mumen.user;
 
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -29,13 +31,14 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
 import com.uesugi.mumen.R;
 import com.uesugi.mumen.entity.HyUserEntity;
 import com.uesugi.mumen.entity.LoginEntity;
 import com.uesugi.mumen.entity.TestEntity;
 import com.uesugi.mumen.utils.Constants;
-import com.uesugi.mumen.utils.DisplayUtil;
 import com.uesugi.mumen.utils.RemoteUtils;
 import com.uesugi.mumen.utils.ShowAlertDialog;
 import com.uesugi.mumen.utils.StringUtils;
@@ -185,7 +188,7 @@ public class LoginActivity extends FinalActivity {
 					// UserPreferences.saveUserPref(mContext, entity.l_user);
 					Toast.makeText(mContext, "发送成功！", Toast.LENGTH_SHORT)
 							.show();
-//					mEdtVerifiy.setText(entity.verify);
+					// mEdtVerifiy.setText(entity.verify);
 					mTimeNum = 60;
 					timerStart();
 				}
@@ -230,49 +233,31 @@ public class LoginActivity extends FinalActivity {
 							Constants.TOKEN = entity.l_user.token;
 							UserPreferences.saveUserPref(mContext,
 									Constants.entityUser);
-							FinalDb db = FinalDb.create(mContext);
 
-							List<HyUserEntity> userList = db
-									.findAll(HyUserEntity.class);// 查询所有的用户
-							if (userList == null || userList.size() == 0) {
+							Set<String> tagSet = new LinkedHashSet<String>();
+							tagSet.add("xy" + Constants.entityUser.factory_id);
+
+							JPushInterface.setAliasAndTags(mContext, null,
+									tagSet, new TagAliasCallback() {
+
+										@Override
+										public void gotResult(int arg0,
+												String arg1, Set<String> arg2) {
+											// TODO Auto-generated method stub
+
+										}
+									});
+							String hyName = UserPreferences.loadUserNamePref(
+									mContext, mEdtPhone.getText().toString());
+
+							if (hyName == null ) {
 								Intent intent = new Intent();
 								intent.setClass(mContext, HyActivity.class);
 								if (Constants.entityUser.factory_id.equals("1")) {
 									intent.putExtra("flag", true);
 								}
 								startActivity(intent);
-								HyUserEntity user = new HyUserEntity();
-
-								user.setName(mEdtPhone.getText().toString());
-
-								db.save(user);
-							} else {
-								boolean x = false;
-								for (int i = 0; i < userList.size(); i++) {
-									if (userList
-											.get(i)
-											.getName()
-											.equals(mEdtPhone.getText()
-													.toString())) {
-										x = true;
-									} else {
-
-									}
-								}
-								if (!x) {
-									Intent intent = new Intent();
-									intent.setClass(mContext, HyActivity.class);
-									if (Constants.entityUser.factory_id
-											.equals("1")) {
-										intent.putExtra("flag", true);
-									}
-									startActivity(intent);
-									HyUserEntity user = new HyUserEntity();
-
-									user.setName(mEdtPhone.getText().toString());
-
-									db.save(user);
-								}
+								UserPreferences.saveUserNamePref(mContext, mEdtPhone.getText().toString());
 							}
 
 							setResult(RESULT_OK);
